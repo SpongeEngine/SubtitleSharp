@@ -1,0 +1,251 @@
+[Script Info]
+; This is an Advanced Sub Station Alpha v4+ script.
+Title: subtitles
+ScriptType: v4.00+
+Collisions: Normal
+PlayDepth: 0
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Default,Arial,20,&H00FFFFFF,&H0300FFFF,&H00000000,&H02000000,0,0,0,0,100,100,0,0,1,2,1,2,10,10,10,1
+
+[Events]
+Format: Layer, Start, End, Style, Actor, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:01.32,0:00:04.00,Default,,0,0,0,,At what age did you lose your virginity?
+Dialogue: 0,0:00:04.41,0:00:06.00,Default,,0,0,0,,Virginity?
+Dialogue: 0,0:00:06.00,0:00:07.99,Default,,0,0,0,,What is virginity?
+Dialogue: 0,0:00:07.99,0:00:09.99,Default,,0,0,0,,Seriously, what is virginity?
+Dialogue: 0,0:00:11.11,0:00:13.44,Default,,0,0,0,,At what age did you lose...
+Dialogue: 0,0:00:13.92,0:00:15.92,Default,,0,0,0,,…did you have sex for the first time?
+Dialogue: 0,0:00:16.00,0:00:19.68,Default,,0,0,0,,The first girl I ever had…
+Dialogue: 0,0:00:19.68,0:00:21.68,Default,,0,0,0,,was the one who ate the whole pot of fish stew.
+Dialogue: 0,0:00:23.13,0:00:28.00,Default,,0,0,0,,Then I had another one, but I lost her after throwing away her gift.
+Dialogue: 0,0:00:28.00,0:00:34.00,Default,,0,0,0,,And I won’t say more because the one I was about to rape her, I lost her too.
+Dialogue: 0,0:00:34.00,0:00:35.82,Default,,0,0,0,,And the one I brought to my house,
+Dialogue: 0,0:00:35.82,0:00:37.53,Default,,0,0,0,,the one who ate the whole pot of fish stew,
+Dialogue: 0,0:00:37.53,0:00:39.53,Default,,0,0,0,,she didn’t want me to touch her or anything.
+Dialogue: 0,0:00:40.21,0:00:43.37,Default,,0,0,0,,But she ate it all, the sneaky little mole.
+Dialogue: 0,0:00:43.49,0:00:49.61,Default,,0,0,0,,And I saw her breasts because she fell—she had a bruise, a big hematoma.
+Dialogue: 0,0:00:51.30,0:00:54.00,Default,,0,0,0,,And her aunt also ate my fish stew at my house.
+Dialogue: 0,0:00:54.00,0:00:55.73,Default,,0,0,0,,And why didn’t you get married?
+Dialogue: 0,0:00:55.83,0:00:58.23,Default,,0,0,0,,I don’t wanna get married. I’m good.
+Dialogue: 0,0:00:58.23,0:01:00.23,Default,,0,0,0,,Now that they see me on TV, all the girls stop me in the street.
+Dialogue: 0,0:01:01.49,0:01:04.00,Default,,0,0,0,,I’m single, I’m a lone wolf.
+Dialogue: 0,0:01:04.00,0:01:07.46,Default,,0,0,0,,Because if I marry one, she wins and keeps everything.
+Dialogue: 0,0:01:07.46,0:01:10.42,Default,,0,0,0,,And because they watch soap operas, they come running after me.
+Dialogue: 0,0:01:15.54,0:01:19.07,Default,,0,0,0,,There are soap operas for the morning, noon, afternoon, and even at night.
+Dialogue: 0,0:01:23.78,0:01:25.75,Default,,0,0,0,,And when they get moody, they leave.
+Dialogue: 0,0:01:26.00,0:01:29.73,Default,,0,0,0,,Do you think men and women are equal?
+Dialogue: 0,0:01:30.00,0:01:33.13,Default,,0,0,0,,No, men are one thing, women are another.
+Dialogue: 0,0:01:33.44,0:01:36.04,Default,,0,0,0,,I admire the way you explain things so clearly.
+Dialogue: 0,0:01:38.00,0:01:40.00,Default,,0,0,0,,I said it loud and clear, didn’t I?
+Dialogue: 0,0:01:40.00,0:01:41.92,Default,,0,0,0,,It’s glorious!
+Dialogue: 0,0:01:44.70,0:01:47.13,Default,,0,0,0,,Did you hear they say there are gay cops now?
+Dialogue: 0,0:01:47.46,0:01:51.51,Default,,0,0,0,,Yeah, I saw it in a magazine. Now you can hook up with them.
+Dialogue: 0,0:01:53.00,0:01:55.00,Default,,0,0,0,,Are you thinking of coming out of the closet?
+Dialogue: 0,0:01:55.00,0:01:57.00,Default,,0,0,0,,The closet? What closet?
+Dialogue: 0,0:01:57.00,0:01:59.00,Default,,0,0,0,,Closet?
+Dialogue: 0,0:01:59.00,0:02:03.00,Default,,0,0,0,,I put on my clothes, go out into the street, like always.
+Dialogue: 0,0:02:03.00,0:02:09.00,Default,,0,0,0,,You know, when people publicly come out as gay, they “come out of the closet.”
+Dialogue: 0,0:02:09.00,0:02:11.00,Default,,0,0,0,,Come out of the closet? What’s that?
+Dialogue: 0,0:02:11.00,0:02:13.00,Default,,0,0,0,,Gay?
+Dialogue: 0,0:02:13.00,0:02:14.00,Default,,0,0,0,,Homosexuals.
+Dialogue: 0,0:02:14.00,0:02:16.00,Default,,0,0,0,,Ah, all that stuff.
+Dialogue: 0,0:02:19.37,0:02:21.00,Default,,0,0,0,,Well, I don’t know anything about that.
+Dialogue: 0,0:02:21.89,0:02:24.89,Default,,0,0,0,,Would you like to be a woman?
+Dialogue: 0,0:02:27.77,0:02:31.00,Default,,0,0,0,,Not anymore, I’ll stay as I am.
+Dialogue: 0,0:02:32.18,0:02:35.00,Default,,0,0,0,,But if I had been born a woman…
+Dialogue: 0,0:02:35.00,0:02:37.00,Default,,0,0,0,,Would you have liked it?
+Dialogue: 0,0:02:37.00,0:02:39.00,Default,,0,0,0,,Yeah, I’d like to be a woman. But I can’t change that.
+Dialogue: 0,0:02:39.00,0:02:41.96,Default,,0,0,0,,Why would you have wanted to be born a woman?
+Dialogue: 0,0:02:41.96,0:02:45.00,Default,,0,0,0,,Because women take everything, they win everything!
+Dialogue: 0,0:02:56.66,0:03:02.00,Default,,0,0,0,,The ones who want to be women, even though they’re men…
+Dialogue: 0,0:03:02.00,0:03:04.00,Default,,0,0,0,,Huh?
+Dialogue: 0,0:03:04.00,0:03:06.00,Default,,0,0,0,,Pluma, right?
+Dialogue: 0,0:03:06.00,0:03:08.00,Default,,0,0,0,,Me too.
+Dialogue: 0,0:03:08.00,0:03:10.00,Default,,0,0,0,,What did you say? Pluma?
+Dialogue: 0,0:03:12.71,0:03:15.00,Default,,0,0,0,,I didn’t hear what you said.
+Dialogue: 0,0:03:15.41,0:03:17.16,Default,,0,0,0,,Ah, he’s gay, right?
+Dialogue: 0,0:03:17.64,0:03:19.64,Default,,0,0,0,,He’s gay, right?
+Dialogue: 0,0:03:30.00,0:03:31.56,Default,,0,0,0,,Do you know how to iron clothes?
+Dialogue: 0,0:03:31.83,0:03:32.92,Default,,0,0,0,,A little.
+Dialogue: 0,0:03:35.68,0:03:36.84,Default,,0,0,0,,Pluma.
+Dialogue: 0,0:03:37.56,0:03:38.43,Default,,0,0,0,,Pluma?
+Dialogue: 0,0:03:39.00,0:03:41.00,Default,,0,0,0,,Ironing clothes.
+Dialogue: 0,0:03:41.00,0:03:42.65,Default,,0,0,0,,Ironing clothes, pants, yeah.
+Dialogue: 0,0:03:42.65,0:03:43.65,Default,,0,0,0,,Do you know how to sew?
+Dialogue: 0,0:03:43.78,0:03:44.55,Default,,0,0,0,,Yeah, a little.
+Dialogue: 0,0:03:44.55,0:03:45.99,Default,,0,0,0,,Pluma.
+Dialogue: 0,0:03:47.00,0:03:49.00,Default,,0,0,0,,Do you know how to scrub floors?
+Dialogue: 0,0:03:53.50,0:03:57.00,Default,,0,0,0,,Damn, now you’re making me doubt myself.
+Dialogue: 0,0:03:57.00,0:03:59.00,Default,,0,0,0,,He’s driving me crazy.
+Dialogue: 0,0:03:59.00,0:04:01.00,Default,,0,0,0,,Just a little, just a little.
+Dialogue: 0,0:04:03.74,0:04:06.00,Default,,0,0,0,,That’s what you’d be if you were the big brother.
+Dialogue: 0,0:04:06.42,0:04:07.79,Default,,0,0,0,,Risitas, please,
+Dialogue: 0,0:04:07.79,0:04:11.27,Default,,0,0,0,,can you tell me how many days you’ve worked
+Dialogue: 0,0:04:11.27,0:04:12.93,Default,,0,0,0,,in your entire life?
+Dialogue: 0,0:04:15.00,0:04:16.60,Default,,0,0,0,,How old are you?
+Dialogue: 0,0:04:16.60,0:04:21.00,Default,,0,0,0,,45 years old. I don’t take age like a flower or anything.
+Dialogue: 0,0:04:21.00,0:04:23.00,Default,,0,0,0,,45 years and still looking good.
+Dialogue: 0,0:04:23.00,0:04:26.00,Default,,0,0,0,,Can you tell me, please, how many days you’ve worked?
+Dialogue: 0,0:04:26.00,0:04:28.00,Default,,0,0,0,,I burned the papers.
+Dialogue: 0,0:04:28.37,0:04:30.49,Default,,0,0,0,,The ones they gave me when I worked.
+Dialogue: 0,0:04:30.86,0:04:33.00,Default,,0,0,0,,But how many days in total, more or less?
+Dialogue: 0,0:04:33.00,0:04:35.00,Default,,0,0,0,,More or less…
+Dialogue: 0,0:04:35.00,0:04:38.72,Default,,0,0,0,,In 45 years, have you worked at least one full year?
+Dialogue: 0,0:04:39.27,0:04:40.86,Default,,0,0,0,,Seven years.
+Dialogue: 0,0:04:41.53,0:04:44.00,Default,,0,0,0,,Seven. Not more than that.
+Dialogue: 0,0:04:46.00,0:04:47.00,Default,,0,0,0,,Up until today.
+Dialogue: 0,0:04:47.00,0:04:48.51,Default,,0,0,0,,In 45 years, seven years?
+Dialogue: 0,0:04:48.51,0:04:49.51,Default,,0,0,0,,Seven.
+Dialogue: 0,0:04:49.51,0:04:51.51,Default,,0,0,0,,Including vacations.
+Dialogue: 0,0:04:52.34,0:04:57.00,Default,,0,0,0,,The first thing I asked when I got a job was for vacation days.
+Dialogue: 0,0:04:57.46,0:05:01.00,Default,,0,0,0,,And they’d say, "Damn, you just got here, and you’re already asking for vacation!"
+Dialogue: 0,0:05:01.76,0:05:02.67,Default,,0,0,0,,Really?
+Dialogue: 0,0:05:08.96,0:05:12.46,Default,,0,0,0,,And what’s the hardest job you’ve ever had?
+Dialogue: 0,0:05:13.27,0:05:15.27,Default,,0,0,0,,The hardest one, the hardest one… at the beach.
+Dialogue: 0,0:05:15.39,0:05:16.93,Default,,0,0,0,,Working at the beach.
+Dialogue: 0,0:05:17.32,0:05:19.79,Default,,0,0,0,,From morning till night.
+Dialogue: 0,0:05:19.79,0:05:20.79,Default,,0,0,0,,Collecting sand?
+Dialogue: 0,0:05:20.90,0:05:21.90,Default,,0,0,0,,Not sand.
+Dialogue: 0,0:05:21.90,0:05:23.90,Default,,0,0,0,,I was working like crazy.
+Dialogue: 0,0:05:24.00,0:05:27.00,Default,,0,0,0,,And what happened to me… I didn’t tell you?
+Dialogue: 0,0:05:27.00,0:05:28.00,Default,,0,0,0,,At the…
+Dialogue: 0,0:05:28.00,0:05:29.65,Default,,0,0,0,,At the kitchen.
+Dialogue: 0,0:05:29.65,0:05:31.44,Default,,0,0,0,,What the cook made me do.
+Dialogue: 0,0:05:31.44,0:05:35.00,Default,,0,0,0,,Clean lettuce, do the laundry, clean the fish…
+Dialogue: 0,0:05:35.00,0:05:38.00,Default,,0,0,0,,And what happened with the cook that fired me.
+Dialogue: 0,0:05:38.00,0:05:39.00,Default,,0,0,0,,What happened?
+Dialogue: 0,0:05:39.00,0:05:41.00,Default,,0,0,0,,I didn’t tell you?
+Dialogue: 0,0:05:41.00,0:05:42.00,Default,,0,0,0,,I don’t remember.
+Dialogue: 0,0:05:42.00,0:05:44.00,Default,,0,0,0,,When I was in Chipiona.
+Dialogue: 0,0:05:44.00,0:05:48.00,Default,,0,0,0,,I was the new guy, and the cook asks me, "You the new kitchen assistant?"
+Dialogue: 0,0:05:48.00,0:05:49.00,Default,,0,0,0,,Yeah.
+Dialogue: 0,0:05:49.00,0:05:52.00,Default,,0,0,0,,"Risitas, right? They told me to call you that."
+Dialogue: 0,0:05:52.00,0:05:54.00,Default,,0,0,0,,The new guy. How long are you staying?
+Dialogue: 0,0:05:54.00,0:05:58.00,Default,,0,0,0,,Well, today’s May, Pepe told me till September.
+Dialogue: 0,0:05:58.00,0:06:00.00,Default,,0,0,0,,And what do you know how to do in the kitchen?
+Dialogue: 0,0:06:00.00,0:06:02.70,Default,,0,0,0,,Clean fish, make rice…
+Dialogue: 0,0:06:02.70,0:06:04.72,Default,,0,0,0,,"Alright, you’ll be the assistant here."
+Dialogue: 0,0:06:04.72,0:06:07.00,Default,,0,0,0,,But for your first day, listen up.
+Dialogue: 0,0:06:07.00,0:06:09.00,Default,,0,0,0,,We’re going to clean everything here.
+Dialogue: 0,0:06:09.00,0:06:10.00,Default,,0,0,0,,Alright?
+Dialogue: 0,0:06:10.00,0:06:11.35,Default,,0,0,0,,And then we’ll talk in the morning.
+Dialogue: 0,0:06:11.51,0:06:14.00,Default,,0,0,0,,You know that when we open a restaurant,
+Dialogue: 0,0:06:14.00,0:06:16.00,Default,,0,0,0,,everything has to be spotless.
+Dialogue: 0,0:06:16.00,0:06:17.00,Default,,0,0,0,,Yes, chef.
+Dialogue: 0,0:06:18.63,0:06:22.56,Default,,0,0,0,,We started cleaning at 11 in the morning…
+Dialogue: 0,0:06:22.56,0:06:25.26,Default,,0,0,0,,The restaurant had been closed all winter,
+Dialogue: 0,0:06:25.26,0:06:27.26,Default,,0,0,0,,we were getting it ready for summer.
+Dialogue: 0,0:06:27.26,0:06:31.26,Default,,0,0,0,,By 2 a.m., I had scrubbed, wiped, fried, boiled—everything!
+Dialogue: 0,0:06:31.26,0:06:33.26,Default,,0,0,0,,I did EVERYTHING.
+Dialogue: 0,0:06:34.00,0:06:38.00,Default,,0,0,0,,And then, the chef hands me 20 paelleras.
+Dialogue: 0,0:06:38.00,0:06:41.00,Default,,0,0,0,,You should’ve seen them—completely covered in mold!
+Dialogue: 0,0:06:41.00,0:06:43.00,Default,,0,0,0,,"Risitas," he says,
+Dialogue: 0,0:06:43.00,0:06:45.90,Default,,0,0,0,,"You can’t wash these in the sink."
+Dialogue: 0,0:06:46.06,0:06:48.42,Default,,0,0,0,,And by then, my back was already killing me.
+Dialogue: 0,0:06:48.42,0:06:52.35,Default,,0,0,0,,From hunching over all day, scrubbing pots and pans.
+Dialogue: 0,0:06:52.46,0:06:54.00,Default,,0,0,0,,It was 2 in the morning.
+Dialogue: 0,0:06:54.00,0:06:56.00,Default,,0,0,0,,And he goes, "Alright, take a break now."
+Dialogue: 0,0:06:56.00,0:06:59.00,Default,,0,0,0,,"You’ve cleaned the kitchen, tomorrow we open."
+Dialogue: 0,0:06:59.00,0:07:02.28,Default,,0,0,0,,"Now, take these 20 paella pans"—covered in mold—
+Dialogue: 0,0:07:02.74,0:07:03.74,Default,,0,0,0,,"You listening to me?"
+Dialogue: 0,0:07:03.74,0:07:04.78,Default,,0,0,0,,"Take a rope,"
+Dialogue: 0,0:07:04.78,0:07:06.78,Default,,0,0,0,,"tie them up, and take them to the beach."
+Dialogue: 0,0:07:07.00,0:07:09.00,Default,,0,0,0,,"Leave them in the water overnight."
+Dialogue: 0,0:07:09.00,0:07:12.00,Default,,0,0,0,,"The seawater will clean off all the mold."
+Dialogue: 0,0:07:12.00,0:07:14.00,Default,,0,0,0,,"But make sure you remember where you leave them!"
+Dialogue: 0,0:07:14.00,0:07:15.00,Default,,0,0,0,,"Wait, what?"
+Dialogue: 0,0:07:15.00,0:07:17.00,Default,,0,0,0,,"The seawater, with its salt and minerals,
+Dialogue: 0,0:07:17.00,0:07:20.00,Default,,0,0,0,,will naturally clean the paella pans overnight."
+Dialogue: 0,0:07:20.00,0:07:21.00,Default,,0,0,0,,"The salt will do the work."
+Dialogue: 0,0:07:21.00,0:07:23.00,Default,,0,0,0,,"The salt."
+Dialogue: 0,0:07:23.00,0:07:26.00,Default,,0,0,0,,"The sea, the oranges..."
+Dialogue: 0,0:07:26.00,0:07:27.25,Default,,0,0,0,,I mean, I get it.
+Dialogue: 0,0:07:27.46,0:07:30.00,Default,,0,0,0,,So, at 2 a.m., the chef sends me out to the beach.
+Dialogue: 0,0:07:30.20,0:07:33.00,Default,,0,0,0,,"They need to understand you because you’re getting paid for this."
+Dialogue: 0,0:07:33.00,0:07:35.00,Default,,0,0,0,,Oh, right. Sorry.
+Dialogue: 0,0:07:35.00,0:07:37.00,Default,,0,0,0,,The magical seawater treatment.
+Dialogue: 0,0:07:37.00,0:07:39.00,Default,,0,0,0,,I mean, the people down there, they understand, right?
+Dialogue: 0,0:07:39.00,0:07:41.00,Default,,0,0,0,,The audience.
+Dialogue: 0,0:07:41.00,0:07:43.00,Default,,0,0,0,,The salt cleans them, that’s what I meant.
+Dialogue: 0,0:07:43.41,0:07:46.67,Default,,0,0,0,,Not like Holy Week, no—I'm talking about oranges.
+Dialogue: 0,0:07:48.78,0:07:51.37,Default,,0,0,0,,"Risitas, take the 20 paella pans,"
+Dialogue: 0,0:07:51.37,0:07:54.00,Default,,0,0,0,,"Tie them up and leave them in the sea."
+Dialogue: 0,0:07:54.39,0:07:57.00,Default,,0,0,0,,"But make sure you remember where you put them,"
+Dialogue: 0,0:07:57.00,0:08:00.00,Default,,0,0,0,,"because tomorrow morning you’ll have to go get them."
+Dialogue: 0,0:08:00.00,0:08:03.00,Default,,0,0,0,,So at 2 a.m., I go down to the beach, and the tide is low.
+Dialogue: 0,0:08:03.74,0:08:07.39,Default,,0,0,0,,I do exactly as he said—I tie them up, leave them in the water.
+Dialogue: 0,0:08:07.53,0:08:09.00,Default,,0,0,0,,I stick a wooden stake in the sand as a marker.
+Dialogue: 0,0:08:09.00,0:08:12.00,Default,,0,0,0,,Then I go back to the restaurant—it’s now 2:30 a.m.
+Dialogue: 0,0:08:12.20,0:08:14.69,Default,,0,0,0,,"Risitas, did you do it?"
+Dialogue: 0,0:08:14.90,0:08:16.46,Default,,0,0,0,,"Yes, chef."
+Dialogue: 0,0:08:16.46,0:08:19.00,Default,,0,0,0,,"Alright, remember, I’ll wake you up at 8 a.m."
+Dialogue: 0,0:08:19.00,0:08:21.00,Default,,0,0,0,,"Go get the paella pans then."
+Dialogue: 0,0:08:21.99,0:08:23.53,Default,,0,0,0,,So I go to bed.
+Dialogue: 0,0:08:23.53,0:08:26.00,Default,,0,0,0,,The restaurant is ready to open, the rice is prepped.
+Dialogue: 0,0:08:26.00,0:08:28.00,Default,,0,0,0,,At 2 p.m., the chef wakes me up.
+Dialogue: 0,0:08:28.00,0:08:30.00,Default,,0,0,0,,"Risitas!"
+Dialogue: 0,0:08:30.00,0:08:32.00,Default,,0,0,0,,"What?"
+Dialogue: 0,0:08:32.00,0:08:34.00,Default,,0,0,0,,"Go get the paella pans!"
+Dialogue: 0,0:08:34.00,0:08:36.00,Default,,0,0,0,,"Let’s go, it’s already 2 p.m.!"
+Dialogue: 0,0:08:36.00,0:08:38.00,Default,,0,0,0,,I throw on my swimsuit,
+Dialogue: 0,0:08:38.00,0:08:40.00,Default,,0,0,0,,grab my flip-flops, half-dressed—no time to waste.
+Dialogue: 0,0:08:40.00,0:08:42.00,Default,,0,0,0,,I get to the beach…
+Dialogue: 0,0:08:44.27,0:08:46.87,Default,,0,0,0,,And the tide had COME BACK IN!!!
+Dialogue: 0,0:08:48.00,0:08:49.23,Default,,0,0,0,,JESÚS.
+Dialogue: 0,0:08:56.00,0:08:58.00,Default,,0,0,0,,JESÚS.
+Dialogue: 0,0:08:58.00,0:09:00.87,Default,,0,0,0,,I start digging around in the water, and…
+Dialogue: 0,0:09:04.00,0:09:05.51,Default,,0,0,0,,I only found ONE paella pan!
+Dialogue: 0,0:09:07.69,0:09:09.00,Default,,0,0,0,,Just one!
+Dialogue: 0,0:09:09.00,0:09:11.50,Default,,0,0,0,,The only reason I found it was because it got stuck
+Dialogue: 0,0:09:11.50,0:09:14.00,Default,,0,0,0,,between the rocks by the Chipiona lighthouse.
+Dialogue: 0,0:09:14.67,0:09:16.65,Default,,0,0,0,,And when I walk back into the restaurant,
+Dialogue: 0,0:09:16.84,0:09:18.75,Default,,0,0,0,,I go up to the chef… holding one single paella pan.
+Dialogue: 0,0:09:18.96,0:09:20.64,Default,,0,0,0,,And he just looks at me and says—
+Dialogue: 0,0:09:20.64,0:09:22.64,Default,,0,0,0,,"Where are the rest of them?"
+Dialogue: 0,0:09:25.08,0:09:26.30,Default,,0,0,0,,Bend down.
+Dialogue: 0,0:09:26.43,0:09:28.43,Default,,0,0,0,,Bend down and look where the water reached!
+Dialogue: 0,0:09:31.15,0:09:33.15,Default,,0,0,0,,The water had reached all the way to the restaurant!
+Dialogue: 0,0:09:40.43,0:09:41.56,Default,,0,0,0,,JESÚS.
+Dialogue: 0,0:09:41.56,0:09:43.56,Default,,0,0,0,,"What do we do now?!"
+Dialogue: 0,0:09:43.56,0:09:45.56,Default,,0,0,0,,We had two huge sacks of rice ready for the grand opening!
+Dialogue: 0,0:09:48.25,0:09:50.25,Default,,0,0,0,,"CALL SEVILLE! CALL SEVILLE!"
+Dialogue: 0,0:09:50.25,0:09:52.30,Default,,0,0,0,,"Tell them to bring more paella pans!!!"
+Dialogue: 0,0:10:01.53,0:10:03.53,Default,,0,0,0,,JESÚS.
+Dialogue: 0,0:10:03.53,0:10:05.53,Default,,0,0,0,,And there I was, standing there…
+Dialogue: 0,0:10:05.53,0:10:07.53,Default,,0,0,0,,…in my swim trunks…
+Dialogue: 0,0:10:07.53,0:10:09.53,Default,,0,0,0,,…holding one tiny paella pan.
+Dialogue: 0,0:10:09.53,0:10:11.53,Default,,0,0,0,,And the chef just stared at me.
+Dialogue: 0,0:10:11.76,0:10:13.76,Default,,0,0,0,,"Don’t just stand there! Go to Seville!"
+Dialogue: 0,0:10:13.76,0:10:15.76,Default,,0,0,0,,And on the last day, when the Virgin of Regla procession passed by,
+Dialogue: 0,0:10:15.76,0:10:17.60,Default,,0,0,0,,we were all in tears.
+Dialogue: 0,0:10:17.60,0:10:19.60,Default,,0,0,0,,He paid me for that one little paella pan.
+Dialogue: 0,0:10:21.70,0:10:23.70,Default,,0,0,0,,He gave me 500 pesetas for it.
+Dialogue: 0,0:10:25.23,0:10:26.61,Default,,0,0,0,,And I never went back.
+Dialogue: 0,0:10:26.61,0:10:28.61,Default,,0,0,0,,I left.
+Dialogue: 0,0:10:28.61,0:10:30.61,Default,,0,0,0,,I took off walking toward Amarillo.
+Dialogue: 0,0:10:31.73,0:10:33.45,Default,,0,0,0,,JESÚS.
+Dialogue: 0,0:10:36.00,0:10:37.70,Default,,0,0,0,,He sent me…
+Dialogue: 0,0:10:37.70,0:10:38.20,Default,,0,0,0,,He sent me—
+Dialogue: 0,0:10:41.88,0:10:43.63,Default,,0,0,0,,He sent me at night!
+Dialogue: 0,0:10:43.63,0:10:45.63,Default,,0,0,0,,The tide was low when I left them there… but by morning, it had come back in!
+Dialogue: 0,0:10:48.85,0:10:50.85,Default,,0,0,0,,Who knows where those paella pans ended up!
+Dialogue: 0,0:10:50.92,0:10:52.92,Default,,0,0,0,,They probably drifted all the way to—
+Dialogue: 0,0:10:53.04,0:10:54.76,Default,,0,0,0,,—the oil tanker!
+Dialogue: 0,0:10:55.93,0:10:57.00,Default,,0,0,0,,The Prestige!
+Dialogue: 0,0:10:57.00,0:10:58.13,Default,,0,0,0,,Yeah, the Prestige!
+Dialogue: 0,0:11:04.30,0:11:07.08,Default,,0,0,0,,And I never worked in a kitchen again.
+Dialogue: 0,0:11:07.08,0:11:09.08,Default,,0,0,0,,I HATE KITCHENS!
+Dialogue: 0,0:11:18.00,0:11:20.23,Default,,0,0,0,,But hey, at least he gave me a little money from the tip jar.
+Dialogue: 0,0:11:23.21,0:11:25.21,Default,,0,0,0,,How much was in the tip jar?
+Dialogue: 0,0:11:25.30,0:11:27.49,Default,,0,0,0,,The money he threw at me,
+Dialogue: 0,0:11:27.49,0:11:29.49,Default,,0,0,0,,the money I actually earned…
+Dialogue: 0,0:11:30.00,0:11:32.00,Default,,0,0,0,,…he made me pay for the 20 paella pans!
+Dialogue: 0,0:11:32.00,0:11:34.00,Default,,0,0,0,,At 500 pesetas each!
+Dialogue: 0,0:11:34.00,0:11:36.00,Default,,0,0,0,,I mean, you should’ve seen how I left for Seville!
+Dialogue: 0,0:11:36.00,0:11:38.00,Default,,0,0,0,,I was already bored without the beach.
+Dialogue: 0,0:11:43.44,0:11:45.44,Default,,0,0,0,,Oh man, we laughed so much!
+Dialogue: 0,0:11:50.69,0:11:52.69,Default,,0,0,0,,Jesús, it’s fine.
+Dialogue: 0,0:11:58.00,0:12:00.00,Default,,0,0,0,,I don’t want any more rice, Jesús!
+Dialogue: 0,0:12:00.00,0:12:02.00,Default,,0,0,0,,Not even Chinese rice!
