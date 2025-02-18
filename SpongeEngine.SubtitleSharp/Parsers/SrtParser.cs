@@ -3,9 +3,9 @@ using System.Text.RegularExpressions;
 
 namespace SpongeEngine.SubtitleSharp.Parsers
 {
-    public class SrtParser : ISubtitlesParser
+    public class SrtParser : ISubtitleParser
     {
-        private static readonly string[] _delimiters = { "-->", "- >", "->" };
+        private static readonly string[] _timecodeDelimiters = { "-->", "- >", "->" };
 
         public SrtParser() { }
 
@@ -111,7 +111,7 @@ namespace SpongeEngine.SubtitleSharp.Parsers
         public static bool TryParseTimecodeLine(string line, out int startTc, out int endTc)
         {
             // Split the line using the delimiter (-->)
-            var parts = line.Split(_delimiters, StringSplitOptions.None);
+            var parts = line.Split(_timecodeDelimiters, StringSplitOptions.None);
     
             // Debugging: log the parts after splitting
             Console.WriteLine($"Line: {line}");

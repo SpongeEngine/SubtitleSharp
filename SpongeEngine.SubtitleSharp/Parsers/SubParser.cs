@@ -6,7 +6,7 @@ namespace SpongeEngine.SubtitleSharp.Parsers
     public class SubParser
     {
         // Properties -----------------------------------------------------------------------
-        private readonly Dictionary<SubtitlesFormat, ISubtitlesParser> _subFormatToParser = new Dictionary<SubtitlesFormat, ISubtitlesParser>
+        private readonly Dictionary<SubtitlesFormat, ISubtitleParser> _subFormatToParser = new Dictionary<SubtitlesFormat, ISubtitleParser>
         {
             { SubtitlesFormat.SubRipFormat, new SrtParser() },
             { SubtitlesFormat.SubStationAlphaFormat, new SsaParser() },
@@ -29,11 +29,11 @@ namespace SpongeEngine.SubtitleSharp.Parsers
         /// <returns>The most likely subtitles format</returns>
         public SubtitlesFormat GetMostLikelyFormat(string fileName)
         {
-            var extension = Path.GetExtension(fileName);
+            string extension = Path.GetExtension(fileName);
 
             if (!string.IsNullOrEmpty(extension))
             {
-                foreach (var format in SubtitlesFormat.SupportedSubtitlesFormats)
+                foreach (SubtitlesFormat format in SubtitlesFormat.SupportedSubtitlesFormats)
                 {
                     if (format.Extension != null && Regex.IsMatch(extension, format.Extension, RegexOptions.IgnoreCase))
                     {
@@ -66,7 +66,7 @@ namespace SpongeEngine.SubtitleSharp.Parsers
         /// <returns>The corresponding list of SubtitleItem, null if parsing failed</returns>
         public List<SubtitleItem> ParseStream(Stream stream, Encoding encoding, SubtitlesFormat subFormat = null)
         {
-            var dictionary = subFormat != null ?
+            Dictionary<SubtitlesFormat,ISubtitleParser> dictionary = subFormat != null ?
                 _subFormatToParser
                 // start the parsing by the specified format
                 .OrderBy(dic => Math.Abs(string.Compare(dic.Key.Name, subFormat.Name, StringComparison.Ordinal)))
@@ -84,7 +84,7 @@ namespace SpongeEngine.SubtitleSharp.Parsers
         /// <param name="encoding">The stream encoding</param>
         /// <param name="subFormatDictionary">The dictionary of the subtitles parser (ordered) to try</param>
         /// <returns>The corresponding list of SubtitleItem, null if parsing failed</returns>
-        public List<SubtitleItem> ParseStream(Stream stream, Encoding encoding, Dictionary<SubtitlesFormat, ISubtitlesParser> subFormatDictionary)
+        public List<SubtitleItem> ParseStream(Stream stream, Encoding encoding, Dictionary<SubtitlesFormat, ISubtitleParser> subFormatDictionary)
         {
             if (!stream.CanRead)
             {
@@ -92,7 +92,7 @@ namespace SpongeEngine.SubtitleSharp.Parsers
             }
 
             // If stream isn't seekable, make a copy.
-            var seekableStream = stream;
+            Stream seekableStream = stream;
             if (!stream.CanSeek)
             {
                 seekableStream = StreamHelpers.CopyStream(stream);
@@ -101,7 +101,7 @@ namespace SpongeEngine.SubtitleSharp.Parsers
 
             subFormatDictionary = subFormatDictionary ?? _subFormatToParser;
 
-            foreach (var kvp in subFormatDictionary)
+            foreach (KeyValuePair<SubtitlesFormat,ISubtitleParser> kvp in subFormatDictionary)
             {
                 // Reset the stream position before each parser attempt.
                 if (seekableStream.CanSeek)
@@ -109,8 +109,8 @@ namespace SpongeEngine.SubtitleSharp.Parsers
 
                 try
                 {
-                    var parser = kvp.Value;
-                    var items = parser.ParseStream(seekableStream, encoding);
+                    ISubtitleParser subtitleParser = kvp.Value;
+                    List<SubtitleItem> items = subtitleParser.ParseStream(seekableStream, encoding);
                     if (items != null && items.Any())
                     {
                         return items;
@@ -126,8 +126,8 @@ namespace SpongeEngine.SubtitleSharp.Parsers
             // All parsers failed: reset position and log the beginning of the stream.
             if (seekableStream.CanSeek)
                 seekableStream.Position = 0;
-            var firstCharsOfFile = LogFirstCharactersOfStream(seekableStream, 500, encoding);
-            var message = string.Format("All the subtitles parsers failed to parse the following stream:{0}", firstCharsOfFile);
+            string firstCharsOfFile = LogFirstCharactersOfStream(seekableStream, 500, encoding);
+            string message = string.Format("All the subtitles parsers failed to parse the following stream:{0}", firstCharsOfFile);
             throw new ArgumentException(message);
         }
 
@@ -140,7 +140,7 @@ namespace SpongeEngine.SubtitleSharp.Parsers
         /// <returns>The first characters of the stream</returns>
         private string LogFirstCharactersOfStream(Stream stream, int nbOfCharactersToPrint, Encoding encoding)
         {
-            var message = "";
+            string message = "";
             // print the first 500 characters
             if (stream.CanRead)
             {
@@ -149,9 +149,9 @@ namespace SpongeEngine.SubtitleSharp.Parsers
                     stream.Position = 0;
                 }
 
-                var reader = new StreamReader(stream, encoding, true);
+                StreamReader reader = new StreamReader(stream, encoding, true);
 
-                var buffer = new char[nbOfCharactersToPrint];
+                char[] buffer = new char[nbOfCharactersToPrint];
                 reader.ReadBlock(buffer, 0, nbOfCharactersToPrint);
                 message = string.Format("Parsing of subtitle stream failed. Beginning of sub stream:\n{0}",
                                         string.Join("", buffer));

@@ -2,19 +2,11 @@
 {
     public class SubtitlesFormat
     {
-        // Properties -----------------------------------------
-
         public string Name { get; set; }
         public string Extension { get; set; }
-
-
-        // Private constructor to avoid duplicates ------------
-
+        
         private SubtitlesFormat(){}
-
-
-        // Predefined instances -------------------------------
-
+        
         public static SubtitlesFormat SubRipFormat = new SubtitlesFormat()
         {
             Name = "SubRip",
@@ -63,6 +55,4 @@
             };
 
     }
-
-
 }

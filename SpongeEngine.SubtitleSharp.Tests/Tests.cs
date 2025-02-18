@@ -109,14 +109,14 @@ namespace SpongeEngine.SubtitleSharp.Tests
         [Fact]
         public void ShouldFailForInvalidSrt_BadTimecode()
         {
-            var invalidSrtStream = new MemoryStream(Encoding.UTF8.GetBytes(@"1
+            MemoryStream invalidSrtStream = new MemoryStream(Encoding.UTF8.GetBytes(@"1
     invalid_timecode --> 00:00:04,000
     Some text"));
 
-            var parser = new SrtParser();
+            SrtParser parser = new SrtParser();
 
             // We expect an ArgumentException to be thrown due to the invalid timecode
-            var exception = Assert.Throws<ArgumentException>(() => parser.ParseStream(invalidSrtStream, Encoding.UTF8));
+            ArgumentException exception = Assert.Throws<ArgumentException>(() => parser.ParseStream(invalidSrtStream, Encoding.UTF8));
     
             // Ensure that the exception message contains the expected error message
             Assert.Contains("Invalid timecode in line", exception.Message);
@@ -208,21 +208,21 @@ namespace SpongeEngine.SubtitleSharp.Tests
         [Fact]
         public void TestInvalidSrtStreamWithBadTimecode()
         {
-            var invalidSrtStream = new MemoryStream(Encoding.UTF8.GetBytes(@"1
+            MemoryStream invalidSrtStream = new MemoryStream(Encoding.UTF8.GetBytes(@"1
             invalid_timecode --> 00:00:04,000
             Some text"));
 
-            var parser = new SrtParser();
+            SrtParser parser = new SrtParser();
             Assert.Throws<ArgumentException>(() => parser.ParseStream(invalidSrtStream, Encoding.UTF8));
         }
 
         [Fact]
         public void TestInvalidSrtStreamWithNoText()
         {
-            var invalidSrtStream = new MemoryStream(Encoding.UTF8.GetBytes(@"1
+            MemoryStream invalidSrtStream = new MemoryStream(Encoding.UTF8.GetBytes(@"1
             00:00:01,000 --> 00:00:04,000"));
 
-            var parser = new SrtParser();
+            SrtParser parser = new SrtParser();
             Assert.Throws<ArgumentException>(() => parser.ParseStream(invalidSrtStream, Encoding.UTF8));
         }
     }

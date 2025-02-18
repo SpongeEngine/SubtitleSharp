@@ -12,7 +12,7 @@
     /// 00:18:05,194 --> 00:18:05,905
     /// What was that?
     /// </summary>
-    public class SrtWriter : ISubtitlesWriter
+    public class SrtWriter : ISubtitleWriter
     {
         /// <summary>
         /// Converts a subtitle item into the lines for an SRT subtitle entry

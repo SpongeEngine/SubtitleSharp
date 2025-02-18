@@ -18,7 +18,7 @@ namespace SpongeEngine.SubtitleSharp.Writers
     /// Dialogue: 0,0:18:03.87,0:18:04.23,,,0,0,0,,Oh?
     /// Dialogue: 0,0:18:05.19,0:18:05.90,,,0,0,0,,What was that?
     /// </summary>
-    public class SsaWriter : ISubtitlesWriter
+    public class SsaWriter : ISubtitleWriter
     {
         /// <summary>
         /// Write the SSA file header to a text writer 

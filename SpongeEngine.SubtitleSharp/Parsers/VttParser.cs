@@ -18,35 +18,32 @@ namespace SpongeEngine.SubtitleSharp.Parsers
     /// 00:00:15.000 --> 00:00:18.000
     /// At the left we can see...
     /// </summary>
-    public class VttParser : ISubtitlesParser
+    public class VttParser : ISubtitleParser
     {
-        private static readonly Regex _rxLongTimestamp = new Regex("(?<H>[0-9]+):(?<M>[0-9]+):(?<S>[0-9]+)[,\\.](?<m>[0-9]+)", RegexOptions.Compiled);
-        private static readonly Regex _rxShortTimestamp = new Regex("(?<M>[0-9]+):(?<S>[0-9]+)[,\\.](?<m>[0-9]+)", RegexOptions.Compiled);
+        private static readonly Regex _longTimestampRegex = new Regex("(?<H>[0-9]+):(?<M>[0-9]+):(?<S>[0-9]+)[,\\.](?<m>[0-9]+)", RegexOptions.Compiled);
+        private static readonly Regex _shortTimestampRegex = new Regex("(?<M>[0-9]+):(?<S>[0-9]+)[,\\.](?<m>[0-9]+)", RegexOptions.Compiled);
 
-        // Properties -----------------------------------------------------------------------
-        private readonly string[] _delimiters = new string[] { "-->", "- >", "->" };
+        private readonly string[] _timecodeDelimiters = new string[] { "-->", "- >", "->" };
 
-        // Constructors --------------------------------------------------------------------
         public VttParser() { }
 
-        // Methods -------------------------------------------------------------------------
         public List<SubtitleItem> ParseStream(Stream vttStream, Encoding encoding)
         {
-            // test if stream if readable and seekable (just a check, should be good)
+            // Test if stream if readable and seekable (just a check, should be good).
             if (!vttStream.CanRead || !vttStream.CanSeek)
             {
-                var message = string.Format("Stream must be seekable and readable in a subtitles parser. " +
+                string message = string.Format("Stream must be seekable and readable in a subtitles parser. " +
                                    "Operation interrupted; isSeekable: {0} - isReadable: {1}",
                                    vttStream.CanSeek, vttStream.CanSeek);
                 throw new ArgumentException(message);
             }
 
-            // seek the beginning of the stream
+            // Seek the beginning of the stream.
             vttStream.Position = 0;
-            var reader = new StreamReader(vttStream, encoding, detectEncodingFromByteOrderMarks: true);
+            StreamReader reader = new StreamReader(vttStream, encoding, detectEncodingFromByteOrderMarks: true);
 
-            var items = new List<SubtitleItem>();
-            var vttSubParts = GetVttSubTitleParts(reader).GetEnumerator();
+            List<SubtitleItem> items = new List<SubtitleItem>();
+            IEnumerator<string> vttSubParts = GetVttSubTitleParts(reader).GetEnumerator();
             if (false == vttSubParts.MoveNext())
             {
                 throw new FormatException("Parsing as VTT returned no VTT part.");
@@ -54,35 +51,35 @@ namespace SpongeEngine.SubtitleSharp.Parsers
 
             do
             {
-                var lines = vttSubParts.Current
+                IEnumerable<string> lines = vttSubParts.Current
                     .Split(new string[] { Environment.NewLine }, StringSplitOptions.None)
                     .Select(s => s.Trim())
                     .Where(l => !string.IsNullOrEmpty(l));
 
-                var item = new SubtitleItem();
-                foreach (var line in lines)
+                SubtitleItem subtitleItem = new SubtitleItem();
+                foreach (string line in lines)
                 {
-                    if (item.StartTime == 0 && item.EndTime == 0)
+                    if (subtitleItem.StartTime == 0 && subtitleItem.EndTime == 0)
                     {
-                        // we look for the timecodes first
-                        var success = TryParseTimecodeLine(line, out int startTc, out int endTc);
+                        // We look for the timecodes first.
+                        bool success = TryParseTimecodeLine(line, out int startTc, out int endTc);
                         if (success)
                         {
-                            item.StartTime = startTc;
-                            item.EndTime = endTc;
+                            subtitleItem.StartTime = startTc;
+                            subtitleItem.EndTime = endTc;
                         }
                     }
                     else
                     {
-                        // we found the timecode, now we get the text
-                        item.Lines.Add(line);
+                        // We found the timecode, now we get the text.
+                        subtitleItem.Lines.Add(line);
                     }
                 }
 
-                if ((item.StartTime != 0 || item.EndTime != 0) && item.Lines.Any())
+                if ((subtitleItem.StartTime != 0 || subtitleItem.EndTime != 0) && subtitleItem.Lines.Any())
                 {
-                    // parsing succeeded
-                    items.Add(item);
+                    // Parsing succeeded.
+                    items.Add(subtitleItem);
                 }
             }
             while (vttSubParts.MoveNext());
@@ -98,21 +95,21 @@ namespace SpongeEngine.SubtitleSharp.Parsers
 
         public async Task<List<SubtitleItem>> ParseStreamAsync(Stream vttStream, Encoding encoding)
         {
-            // test if stream if readable and seekable (just a check, should be good)
+            // Test if stream if readable and seekable (just a check, should be good).
             if (!vttStream.CanRead || !vttStream.CanSeek)
             {
-                var message = string.Format("Stream must be seekable and readable in a subtitles parser. " +
+                string message = string.Format("Stream must be seekable and readable in a subtitles parser. " +
                                    "Operation interrupted; isSeekable: {0} - isReadable: {1}",
                                    vttStream.CanSeek, vttStream.CanSeek);
                 throw new ArgumentException(message);
             }
 
-            // seek the beginning of the stream
+            // Seek the beginning of the stream.
             vttStream.Position = 0;
-            var reader = new StreamReader(vttStream, encoding, detectEncodingFromByteOrderMarks: true);
+            StreamReader reader = new StreamReader(vttStream, encoding, detectEncodingFromByteOrderMarks: true);
 
-            var items = new List<SubtitleItem>();
-            var vttBlockEnumerator = GetVttSubTitlePartsAsync(reader).GetAsyncEnumerator();
+            List<SubtitleItem> items = new List<SubtitleItem>();
+            IAsyncEnumerator<string> vttBlockEnumerator = GetVttSubTitlePartsAsync(reader).GetAsyncEnumerator();
             if (await vttBlockEnumerator.MoveNextAsync() == false)
             {
                 throw new FormatException("Parsing as VTT returned no VTT part.");
@@ -120,35 +117,35 @@ namespace SpongeEngine.SubtitleSharp.Parsers
 
             do
             {
-                var lines = vttBlockEnumerator.Current
+                IEnumerable<string> lines = vttBlockEnumerator.Current
                     .Split(new string[] { Environment.NewLine }, StringSplitOptions.None)
                     .Select(s => s.Trim())
                     .Where(l => !string.IsNullOrEmpty(l));
 
-                var item = new SubtitleItem();
-                foreach (var line in lines)
+                SubtitleItem subtitleItem = new SubtitleItem();
+                foreach (string line in lines)
                 {
-                    if (item.StartTime == 0 && item.EndTime == 0)
+                    if (subtitleItem.StartTime == 0 && subtitleItem.EndTime == 0)
                     {
-                        // we look for the timecodes first
-                        var success = TryParseTimecodeLine(line, out int startTc, out int endTc);
+                        // We look for the timecodes first.
+                        bool success = TryParseTimecodeLine(line, out int startTc, out int endTc);
                         if (success)
                         {
-                            item.StartTime = startTc;
-                            item.EndTime = endTc;
+                            subtitleItem.StartTime = startTc;
+                            subtitleItem.EndTime = endTc;
                         }
                     }
                     else
                     {
-                        // we found the timecode, now we get the text
-                        item.Lines.Add(line);
+                        // We found the timecode, now we get the text.
+                        subtitleItem.Lines.Add(line);
                     }
                 }
 
-                if ((item.StartTime != 0 || item.EndTime != 0) && item.Lines.Any())
+                if ((subtitleItem.StartTime != 0 || subtitleItem.EndTime != 0) && subtitleItem.Lines.Any())
                 {
-                    // parsing succeeded
-                    items.Add(item);
+                    // Parsing succeeded.
+                    items.Add(subtitleItem);
                 }
             }
             while (await vttBlockEnumerator.MoveNextAsync());
@@ -176,43 +173,43 @@ namespace SpongeEngine.SubtitleSharp.Parsers
         private IEnumerable<string> GetVttSubTitleParts(TextReader reader)
         {
             string line;
-            var sb = new StringBuilder();
+            StringBuilder stringBuilder = new StringBuilder();
 
             while ((line = reader.ReadLine()) != null)
             {
                 if (string.IsNullOrEmpty(line.Trim()))
                 {
                     // return only if not empty
-                    var res = sb.ToString().TrimEnd();
+                    string res = stringBuilder.ToString().TrimEnd();
                     if (!string.IsNullOrEmpty(res))
                     {
                         yield return res;
                     }
-                    sb = new StringBuilder();
+                    stringBuilder = new StringBuilder();
                 }
                 else
                 {
-                    sb.AppendLine(line);
+                    stringBuilder.AppendLine(line);
                 }
             }
 
-            if (sb.Length > 0)
+            if (stringBuilder.Length > 0)
             {
-                yield return sb.ToString();
+                yield return stringBuilder.ToString();
             }
         }
 
         private async IAsyncEnumerable<string> GetVttSubTitlePartsAsync(TextReader reader)
         {
             string line;
-            var sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder();
 
             while ((line = await reader.ReadLineAsync()) != null)
             {
                 if (string.IsNullOrEmpty(line.Trim()))
                 {
-                    // return only if not empty
-                    var res = sb.ToString().TrimEnd();
+                    // Return only if not empty.
+                    string res = sb.ToString().TrimEnd();
                     if (!string.IsNullOrEmpty(res))
                     {
                         yield return res;
@@ -233,10 +230,10 @@ namespace SpongeEngine.SubtitleSharp.Parsers
 
         private bool TryParseTimecodeLine(string line, out int startTc, out int endTc)
         {
-            var parts = line.Split(_delimiters, StringSplitOptions.None);
+            string[] parts = line.Split(_timecodeDelimiters, StringSplitOptions.None);
             if (parts.Length != 2)
             {
-                // this is not a timecode line
+                // This is not a timecode line.
                 startTc = -1;
                 endTc = -1;
                 return false;
@@ -263,7 +260,7 @@ namespace SpongeEngine.SubtitleSharp.Parsers
             int minutes = 0;
             int seconds = 0;
             int milliseconds = -1;
-            var match = _rxLongTimestamp.Match(s);
+            Match match = _longTimestampRegex.Match(s);
             if (match.Success)
             {
                 hours = int.Parse(match.Groups["H"].Value);
@@ -273,7 +270,7 @@ namespace SpongeEngine.SubtitleSharp.Parsers
             }
             else
             {
-                match = _rxShortTimestamp.Match(s);
+                match = _shortTimestampRegex.Match(s);
                 if (match.Success)
                 {
                     minutes = int.Parse(match.Groups["M"].Value);
@@ -284,8 +281,8 @@ namespace SpongeEngine.SubtitleSharp.Parsers
 
             if (milliseconds >= 0)
             {
-                var result = new TimeSpan(0, hours, minutes, seconds, milliseconds);
-                var nbOfMs = (int)result.TotalMilliseconds;
+                TimeSpan result = new TimeSpan(0, hours, minutes, seconds, milliseconds);
+                int nbOfMs = (int)result.TotalMilliseconds;
                 return nbOfMs;
             }
 

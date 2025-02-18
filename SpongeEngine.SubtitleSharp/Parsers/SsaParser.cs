@@ -29,7 +29,7 @@ namespace SpongeEngine.SubtitleSharp.Parsers
     /// Format: Marked, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     /// Dialogue: Marked=0,0:00:01.18,0:00:06.85,DefaultVCD, NTP,0000,0000,0000,,{\pos(400,570)}Like an angel with pity on nobody
     /// </summary>
-    public class SsaParser : ISubtitlesParser
+    public class SsaParser : ISubtitleParser
     {
 
         // Methods ------------------------------------------------------------------
@@ -39,7 +39,7 @@ namespace SpongeEngine.SubtitleSharp.Parsers
             // test if stream if readable and seekable (just a check, should be good)
             if (!ssaStream.CanRead || !ssaStream.CanSeek)
             {
-                var message = string.Format("Stream must be seekable and readable in a subtitles parser. " +
+                string message = string.Format("Stream must be seekable and readable in a subtitles parser. " +
                                             "Operation interrupted; isSeekable: {0} - isReadable: {1}",
                                             ssaStream.CanSeek, ssaStream.CanRead);
                 throw new ArgumentException(message);
@@ -48,13 +48,13 @@ namespace SpongeEngine.SubtitleSharp.Parsers
             // seek the beginning of the stream
             ssaStream.Position = 0;
 
-            var reader = new StreamReader(ssaStream, encoding, true);
+            StreamReader reader = new StreamReader(ssaStream, encoding, true);
 
             // default wrap style to none if the header section doesn't contain a wrap style definition (very possible since it wasn't present in SSA, only ASS) 
             SsaWrapStyle wrapStyle = SsaWrapStyle.None;
 
-            var line = reader.ReadLine();
-            var lineNumber = 1;
+            string? line = reader.ReadLine();
+            int lineNumber = 1;
             // read the line until the [Events] section
             while (line != null && line != SsaFormatConstants.EVENT_LINE)
             {
@@ -73,33 +73,33 @@ namespace SpongeEngine.SubtitleSharp.Parsers
             if (line != null)
             {
                 // we are at the event section
-                var headerLine = reader.ReadLine();
+                string? headerLine = reader.ReadLine();
                 if (!string.IsNullOrEmpty(headerLine))
                 {
-                    var columnHeaders = headerLine.Split(SsaFormatConstants.SEPARATOR).Select(head => head.Trim()).ToList();
+                    List<string> columnHeaders = headerLine.Split(SsaFormatConstants.SEPARATOR).Select(head => head.Trim()).ToList();
 
-                    var startIndexColumn = columnHeaders.IndexOf(SsaFormatConstants.START_COLUMN);
-                    var endIndexColumn = columnHeaders.IndexOf(SsaFormatConstants.END_COLUMN);
-                    var textIndexColumn = columnHeaders.IndexOf(SsaFormatConstants.TEXT_COLUMN);
+                    int startIndexColumn = columnHeaders.IndexOf(SsaFormatConstants.START_COLUMN);
+                    int endIndexColumn = columnHeaders.IndexOf(SsaFormatConstants.END_COLUMN);
+                    int textIndexColumn = columnHeaders.IndexOf(SsaFormatConstants.TEXT_COLUMN);
 
                     if (startIndexColumn > 0 && endIndexColumn > 0 && textIndexColumn > 0)
                     {
-                        var items = new List<SubtitleItem>();
+                        List<SubtitleItem> items = new List<SubtitleItem>();
 
                         line = reader.ReadLine();
                         while (line != null)
                         {
                             if (!string.IsNullOrEmpty(line))
                             {
-                                var columns = line.Split(SsaFormatConstants.SEPARATOR);
-                                var startText = columns[startIndexColumn];
-                                var endText = columns[endIndexColumn];
+                                string[] columns = line.Split(SsaFormatConstants.SEPARATOR);
+                                string startText = columns[startIndexColumn];
+                                string endText = columns[endIndexColumn];
 
 
-                                var textLine = string.Join(",", columns.Skip(textIndexColumn));
+                                string textLine = string.Join(",", columns.Skip(textIndexColumn));
 
-                                var start = ParseSsaTimecode(startText);
-                                var end = ParseSsaTimecode(endText);
+                                int start = ParseSsaTimecode(startText);
+                                int end = ParseSsaTimecode(endText);
 
                                 if (start > 0 && end > 0 && !string.IsNullOrEmpty(textLine))
                                 {
@@ -129,7 +129,7 @@ namespace SpongeEngine.SubtitleSharp.Parsers
                                     // this doesn't actually matter for the SSA/ASS format, however if you were to want to convert from SSA/ASS to a format like SRT, it could lead to spaces preceding the second line, which looks funny 
                                     lines = lines.Select(line => line.TrimStart()).ToList();
 
-                                    var item = new SubtitleItem()
+                                    SubtitleItem subtitleItem = new SubtitleItem()
                                     {
                                         StartTime = start,
                                         EndTime = end,
@@ -137,7 +137,7 @@ namespace SpongeEngine.SubtitleSharp.Parsers
                                         // strip formatting by removing anything within curly braces, this will not remove duplicate content however, which can happen when working with signs for example
                                         PlaintextLines = lines.Select(subtitleLine => Regex.Replace(subtitleLine, @"\{.*?\}", string.Empty)).ToList()
                                     };
-                                    items.Add(item);
+                                    items.Add(subtitleItem);
                                 }
                             }
                             line = reader.ReadLine();
@@ -154,8 +154,8 @@ namespace SpongeEngine.SubtitleSharp.Parsers
                     }
                     else
                     {
-                        var message = string.Format("Couldn't find all the necessary columns " +
-                                                    "headers ({0}, {1}, {2}) in header line {3}",
+                        string message = string.Format("Couldn't find all the necessary columns " +
+                                                       "headers ({0}, {1}, {2}) in header line {3}",
                                                     SsaFormatConstants.START_COLUMN, SsaFormatConstants.END_COLUMN,
                                                     SsaFormatConstants.TEXT_COLUMN, headerLine);
                         throw new ArgumentException(message);
@@ -163,15 +163,15 @@ namespace SpongeEngine.SubtitleSharp.Parsers
                 }
                 else
                 {
-                    var message = string.Format("The header line after the line '{0}' was null -> " +
-                                                "no need to continue parsing", line);
+                    string message = string.Format("The header line after the line '{0}' was null -> " +
+                                                   "no need to continue parsing", line);
                     throw new ArgumentException(message);
                 }
             }
             else
             {
-                var message = string.Format("We reached line '{0}' with line number #{1} without finding to " +
-                                            "Event section ({2})", line, lineNumber, SsaFormatConstants.EVENT_LINE);
+                string message = string.Format("We reached line '{0}' with line number #{1} without finding to " +
+                                               "Event section ({2})", line, lineNumber, SsaFormatConstants.EVENT_LINE);
                 throw new ArgumentException(message);
             }
         }
@@ -188,7 +188,7 @@ namespace SpongeEngine.SubtitleSharp.Parsers
 
             if (TimeSpan.TryParse(s, out result))
             {
-                var nbOfMs = (int)result.TotalMilliseconds;
+                int nbOfMs = (int)result.TotalMilliseconds;
                 return nbOfMs;
             }
             else

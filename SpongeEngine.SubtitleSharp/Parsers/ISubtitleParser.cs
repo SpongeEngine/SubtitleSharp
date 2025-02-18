@@ -5,7 +5,7 @@ namespace SpongeEngine.SubtitleSharp.Parsers
     /// <summary>
     /// Interface specifying the required method for a SubParser.
     /// </summary>
-    public interface ISubtitlesParser
+    public interface ISubtitleParser
     {
         /// <summary>
         /// Parses a subtitles file stream in a list of SubtitleItem

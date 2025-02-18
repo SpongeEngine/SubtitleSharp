@@ -3,7 +3,7 @@
     /// <summary>
     /// Interface specifying the required method for a SubWriter
     /// </summary>
-    public interface ISubtitlesWriter
+    public interface ISubtitleWriter
     {
         /// <summary>
         /// Writes a list of SubtitleItems into a stream 

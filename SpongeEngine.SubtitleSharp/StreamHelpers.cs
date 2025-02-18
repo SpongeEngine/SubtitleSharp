@@ -10,11 +10,11 @@
         /// <returns>A copy of the input Stream</returns>
         public static Stream CopyStream(Stream inputStream)
         {
-            var outputStream = new MemoryStream();
+            MemoryStream outputStream = new MemoryStream();
             int count;
             do
             {
-                var buf = new byte[1024];
+                byte[] buf = new byte[1024];
                 count = inputStream.Read(buf, 0, 1024);
                 outputStream.Write(buf, 0, count);
             } while (inputStream.CanRead && count > 0);
