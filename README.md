@@ -47,7 +47,7 @@ foreach (var item in subtitleItems)
 // Manually specify format for parsing
 SubtitlesFormat format = SubtitlesFormat.SubRipFormat;
 using var fileStream = new FileStream("path_to_subtitle.srt", FileMode.Open, FileAccess.Read);
-var parser = new SubParser();
+var parser = new SubtitleParser();
 var subtitleItems = parser.ParseStream(fileStream, Encoding.UTF8, format);
 ```
 ### Error Handling
@@ -70,7 +70,7 @@ ILogger logger = LoggerFactory
     .CreateLogger<SubtitleParser>();
 
 // Example usage of logger in subtitle parsing
-var parser = new SubParser(logger);
+var parser = new SubtitleParser(logger);
 ```
 
 ### Testing
