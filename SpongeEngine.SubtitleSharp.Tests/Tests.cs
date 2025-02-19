@@ -7,13 +7,13 @@ namespace SpongeEngine.SubtitleSharp.Tests
 {
     public class SubtitleParserTests
     {
-        private readonly SubParser _parser;
+        private readonly SubtitleParser _parser;
         private readonly string _filesFolder;
         private readonly ITestOutputHelper _output;
 
         public SubtitleParserTests(ITestOutputHelper output)
         {
-            _parser = new SubParser(); // Initialize the parser once for all tests
+            _parser = new SubtitleParser(); // Initialize the parser once for all tests
             _filesFolder = Path.Combine(Directory.GetCurrentDirectory(), "Files");
             _output = output; // Store the output helper
         }
@@ -224,6 +224,31 @@ namespace SpongeEngine.SubtitleSharp.Tests
 
             SrtParser parser = new SrtParser();
             Assert.Throws<ArgumentException>(() => parser.ParseStream(invalidSrtStream, Encoding.UTF8));
+        }
+        
+        [Fact]
+        public void ShouldParseVttTextSuccessfully()
+        {
+            // A minimal VTT content sample
+            string vttContent = @"WEBVTT
+
+00:00:10.500 --> 00:00:13.000
+Subtitle line one
+
+00:00:15.000 --> 00:00:18.000
+Subtitle line two";
+
+            // Use the new ParseText overload
+            List<SubtitleItem> items = _parser.ParseText(vttContent, Encoding.UTF8);
+    
+            Assert.NotEmpty(items);
+            Assert.Equal(2, items.Count);
+            Assert.All(items, item =>
+            {
+                Assert.True(item.StartTime > 0);
+                Assert.True(item.EndTime > 0);
+                Assert.NotEmpty(item.Lines);
+            });
         }
     }
 }

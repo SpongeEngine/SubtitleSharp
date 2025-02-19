@@ -3,24 +3,17 @@ using System.Text.RegularExpressions;
 
 namespace SpongeEngine.SubtitleSharp.Parsers
 {
-    public class SubParser
+    public class SubtitleParser
     {
-        // Properties -----------------------------------------------------------------------
         private readonly Dictionary<SubtitlesFormat, ISubtitleParser> _subFormatToParser = new Dictionary<SubtitlesFormat, ISubtitleParser>
         {
             { SubtitlesFormat.SubRipFormat, new SrtParser() },
             { SubtitlesFormat.SubStationAlphaFormat, new SsaParser() },
             { SubtitlesFormat.WebVttFormat, new VttParser() },
         };
-
-
-        // Constructors --------------------------------------------------------------------
-
-        public SubParser(){}
-
-
-        // Methods -------------------------------------------------------------------------
-
+        
+        public SubtitleParser(){}
+        
         /// <summary>
         /// Gets the most likely format of the subtitle file based on its filename.
         /// Most likely because .sub are sometimes srt files for example.
@@ -43,6 +36,18 @@ namespace SpongeEngine.SubtitleSharp.Parsers
             }
 
             return null;
+        }
+        
+        public List<SubtitleItem> ParseText(string subtitleContent, Encoding? encoding = null, SubtitlesFormat? preferredFormat = null)
+        {
+            if (string.IsNullOrWhiteSpace(subtitleContent))
+            {
+                throw new ArgumentException("Subtitle text cannot be null or empty.", nameof(subtitleContent));
+            }
+    
+            encoding ??= Encoding.UTF8;
+            using var stream = new MemoryStream(encoding.GetBytes(subtitleContent));
+            return ParseStream(stream, encoding, preferredFormat);
         }
 
         /// <summary>
@@ -163,6 +168,5 @@ namespace SpongeEngine.SubtitleSharp.Parsers
             }
             return message;
         }
-
     }
 }

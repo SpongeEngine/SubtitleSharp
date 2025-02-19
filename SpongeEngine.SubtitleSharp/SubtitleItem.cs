@@ -6,15 +6,18 @@
         /// Start time in milliseconds.
         /// </summary>
         public int StartTime { get; set; }
+        
         /// <summary>
         /// End time in milliseconds.
         /// </summary>
         public int EndTime { get; set; }
+        
         /// <summary>
         /// The raw subtitle string from the file
         /// May include formatting
         /// </summary>
         public List<string> Lines { get; set; }
+        
         /// <summary>
         /// The plain-text string from the file
         /// Does not include formatting
