@@ -46,7 +46,7 @@ namespace SpongeEngine.SubtitleSharp.Parsers
             }
     
             encoding ??= Encoding.UTF8;
-            using var stream = new MemoryStream(encoding.GetBytes(subtitleContent));
+            using MemoryStream stream = new MemoryStream(encoding.GetBytes(subtitleContent));
             return ParseStream(stream, encoding, preferredFormat);
         }
 

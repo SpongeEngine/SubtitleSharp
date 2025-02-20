@@ -5,7 +5,7 @@
         public string Name { get; set; }
         public string Extension { get; set; }
         
-        private SubtitlesFormat(){}
+        private SubtitlesFormat() {}
         
         public static SubtitlesFormat SubRipFormat = new SubtitlesFormat()
         {
@@ -44,15 +44,14 @@
         };
 
         public static List<SubtitlesFormat> SupportedSubtitlesFormats = new List<SubtitlesFormat>()
-            {
-                SubRipFormat,
-                MicroDvdFormat,
-                SubViewerFormat,
-                SubStationAlphaFormat,
-                TtmlFormat,
-                WebVttFormat,
-                YoutubeXmlFormat
-            };
-
+        {
+            SubRipFormat,
+            MicroDvdFormat,
+            SubViewerFormat,
+            SubStationAlphaFormat,
+            TtmlFormat,
+            WebVttFormat,
+            YoutubeXmlFormat
+        };
     }
 }

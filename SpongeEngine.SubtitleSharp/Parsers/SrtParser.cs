@@ -17,27 +17,27 @@ namespace SpongeEngine.SubtitleSharp.Parsers
             }
 
             srtStream.Position = 0;
-            var reader = new StreamReader(srtStream, encoding, detectEncodingFromByteOrderMarks: true);
-            var items = new List<SubtitleItem>();
-            var srtSubParts = GetSrtSubTitleParts(reader).ToList();
+            StreamReader reader = new StreamReader(srtStream, encoding, detectEncodingFromByteOrderMarks: true);
+            List<SubtitleItem> items = new List<SubtitleItem>();
+            List<string> srtSubParts = GetSrtSubTitleParts(reader).ToList();
 
             if (!srtSubParts.Any())
             {
                 throw new FormatException("Parsing as SRT returned no subtitle parts.");
             }
 
-            foreach (var srtSubPart in srtSubParts)
+            foreach (string srtSubPart in srtSubParts)
             {
-                var lines = srtSubPart
+                List<string> lines = srtSubPart
                     .Split(new[] { Environment.NewLine }, StringSplitOptions.None)
                     .Select(s => s.Trim())
                     .Where(l => !string.IsNullOrWhiteSpace(l))
                     .ToList();
 
-                var item = new SubtitleItem();
+                SubtitleItem item = new SubtitleItem();
                 bool timecodeFound = false;
 
-                foreach (var line in lines)
+                foreach (string line in lines)
                 {
                     Console.WriteLine($"[DEBUG] Parsing line: {line}");
 
@@ -85,33 +85,33 @@ namespace SpongeEngine.SubtitleSharp.Parsers
         private IEnumerable<string> GetSrtSubTitleParts(TextReader reader)
         {
             string line;
-            var sb = new StringBuilder();
+            StringBuilder stringBuilder = new StringBuilder();
             while ((line = reader.ReadLine()) != null)
             {
                 if (string.IsNullOrWhiteSpace(line))
                 {
-                    var res = sb.ToString().TrimEnd();
+                    string res = stringBuilder.ToString().TrimEnd();
                     if (!string.IsNullOrWhiteSpace(res))
                     {
                         yield return res;
                     }
-                    sb = new StringBuilder();
+                    stringBuilder = new StringBuilder();
                 }
                 else
                 {
-                    sb.AppendLine(line);
+                    stringBuilder.AppendLine(line);
                 }
             }
-            if (sb.Length > 0)
+            if (stringBuilder.Length > 0)
             {
-                yield return sb.ToString();
+                yield return stringBuilder.ToString();
             }
         }
         
         public static bool TryParseTimecodeLine(string line, out int startTc, out int endTc)
         {
             // Split the line using the delimiter (-->)
-            var parts = line.Split(_timecodeDelimiters, StringSplitOptions.None);
+            string[] parts = line.Split(_timecodeDelimiters, StringSplitOptions.None);
     
             // Debugging: log the parts after splitting
             Console.WriteLine($"Line: {line}");
@@ -144,7 +144,7 @@ namespace SpongeEngine.SubtitleSharp.Parsers
 
         public static int ParseSrtTimecode(string s)
         {
-            var match = Regex.Match(s, @"^(\d{2}):(\d{2}):(\d{2}),(\d{3})$");
+            Match match = Regex.Match(s, @"^(\d{2}):(\d{2}):(\d{2}),(\d{3})$");
 
             if (match.Success)
             {
