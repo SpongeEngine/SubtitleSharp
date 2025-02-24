@@ -66,7 +66,7 @@ using SpongeEngine.SubtitleSharp;
 var preferredFormat = SubtitlesFormat.SubRipFormat;
 
 using var fileStream = new FileStream("path_to_subtitle.srt", FileMode.Open, FileAccess.Read);
-var subtitleItems = new SubtitleParser().ParseStream(fileStream, new SubtitleParserOptions { Encoding = Encoding.UTF8 }, preferredFormat);
+var subtitleItems = new SubtitleParser().ParseStream(fileStream, new SubtitleParserOptions { Encoding = Encoding.UTF8, PrioritizedSubtitleFormat = SubtitlesFormat.SubRipFormat });
 ```
 
 ### Asynchronous Parsing
