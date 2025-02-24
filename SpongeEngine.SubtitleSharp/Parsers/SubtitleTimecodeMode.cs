@@ -1,8 +1,17 @@
 namespace SpongeEngine.SubtitleSharp.Parsers
 {
+    /// <summary>
+    /// Specifies how subtitle timecodes should be handled during parsing.
+    /// </summary>
     public enum SubtitleTimecodeMode
     {
-        Required,   // Timecodes must be present.
-        Optional    // Timecodes may be missing; dummy timecodes will be assigned.
+        /// <summary>
+        /// Timecodes must be present in the subtitle data.
+        /// </summary>
+        Required,
+        /// <summary>
+        /// Timecodes may be missing; in such cases, dummy timecodes will be assigned.
+        /// </summary>
+        Optional
     }
 }

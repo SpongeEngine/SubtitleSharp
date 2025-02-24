@@ -1,59 +1,60 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-    <PropertyGroup>
-        <TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
-        <LangVersion>10.0</LangVersion>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-        
-        <!-- Package Info -->
-        <PackageId>SpongeEngine.SubtitleSharp</PackageId>
-        <Title>SubtitleSharp</Title>
-        <Version>2.0.2</Version>
-        <Authors>Dan Clipca</Authors>
-        <Company>Sponge Engine</Company>
-        <Description>C# subtitle utilities.</Description>
+  <PropertyGroup>
+    <!-- Target multiple .NET versions and enable modern C# features -->
+    <TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
+    <LangVersion>10.0</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    
+    <!-- Package Metadata -->
+    <PackageId>SpongeEngine.SubtitleSharp</PackageId>
+    <Title>SubtitleSharp</Title>
+    <Version>2.0.2</Version>
+    <Authors>Dan Clipca</Authors>
+    <Company>Sponge Engine</Company>
+    <Description>C# subtitle utilities.</Description>
 
-        <!-- Package Details -->
-        <PackageTags>llm, ai, openai, koboldcpp, koboldai</PackageTags>
-        <PackageProjectUrl>https://github.com/SpongeEngine/SubtitleSharp</PackageProjectUrl>
-        <RepositoryUrl>https://github.com/SpongeEngine/SubtitleSharp</RepositoryUrl>
-        <RepositoryType>git</RepositoryType>
-        <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <PackageReadmeFile>README.md</PackageReadmeFile>
+    <!-- Package Details -->
+    <PackageTags>llm, ai, openai, koboldcpp, koboldai</PackageTags>
+    <PackageProjectUrl>https://github.com/SpongeEngine/SubtitleSharp</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/SpongeEngine/SubtitleSharp</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
 
-        <!-- Documentation -->
-        <GenerateDocumentationFile>true</GenerateDocumentationFile>
-        <NoWarn>$(NoWarn);CS1591</NoWarn>
+    <!-- Documentation Generation -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
 
-        <!-- Symbol Package -->
-        <IncludeSymbols>true</IncludeSymbols>
-        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    </PropertyGroup>
+    <!-- Symbol Package Settings -->
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
 
-    <!-- Package Dependencies -->
-    <ItemGroup>
-        <PackageReference Include="Microsoft.Extensions.AI" Version="9.1.0-preview.1.25064.3" />
-        <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.1" Condition="'$(TargetFramework)' == 'net6.0'" />
-        <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.1" Condition="'$(TargetFramework)' == 'net7.0'" />
-        <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.1" Condition="'$(TargetFramework)' == 'net8.0'" />
-        
-        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.1" Condition="'$(TargetFramework)' == 'net6.0'" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.1" Condition="'$(TargetFramework)' == 'net7.0'" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.1" Condition="'$(TargetFramework)' == 'net8.0'" />
-        <PackageReference Include="Polly" Version="8.5.1" />
-        <PackageReference Include="System.Linq.Async" Version="6.0.1" />
-    </ItemGroup>
+  <!-- Package Dependencies -->
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.AI" Version="9.1.0-preview.1.25064.3" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.1" Condition="'$(TargetFramework)' == 'net6.0'" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.1" Condition="'$(TargetFramework)' == 'net7.0'" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.1" Condition="'$(TargetFramework)' == 'net8.0'" />
+    
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.1" Condition="'$(TargetFramework)' == 'net6.0'" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.1" Condition="'$(TargetFramework)' == 'net7.0'" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.1" Condition="'$(TargetFramework)' == 'net8.0'" />
+    <PackageReference Include="Polly" Version="8.5.1" />
+    <PackageReference Include="System.Linq.Async" Version="6.0.1" />
+  </ItemGroup>
 
-    <!-- Include README in the package -->
-    <ItemGroup>
-        <None Include="..\README.md" Pack="true" PackagePath="\" />
-    </ItemGroup>
-    <ItemGroup>
-      <Reference Include="xunit.assert">
-        <HintPath>..\..\..\.nuget\packages\xunit.assert\2.9.3\lib\net6.0\xunit.assert.dll</HintPath>
-      </Reference>
-      <Reference Include="xunit.core">
-        <HintPath>..\..\..\.nuget\packages\xunit.extensibility.core\2.9.3\lib\netstandard1.1\xunit.core.dll</HintPath>
-      </Reference>
-    </ItemGroup>
+  <!-- Include README in the package -->
+  <ItemGroup>
+    <None Include="..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="xunit.assert">
+      <HintPath>..\..\..\.nuget\packages\xunit.assert\2.9.3\lib\net6.0\xunit.assert.dll</HintPath>
+    </Reference>
+    <Reference Include="xunit.core">
+      <HintPath>..\..\..\.nuget\packages\xunit.extensibility.core\2.9.3\lib\netstandard1.1\xunit.core.dll</HintPath>
+    </Reference>
+  </ItemGroup>
 </Project>

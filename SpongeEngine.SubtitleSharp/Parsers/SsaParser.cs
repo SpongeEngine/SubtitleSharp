@@ -5,16 +5,32 @@ using SpongeEngine.SubtitleSharp.Utils;
 namespace SpongeEngine.SubtitleSharp.Parsers
 {
     /// <summary>
-    /// Parser for SubStation Alpha (SSA) subtitle files.
+    /// Implements parsing for the SubStation Alpha (SSA) subtitles format.
+    /// 
+    /// The SSA format is a structured subtitle format that includes sections such as [Script Info] and [Events].
+    /// This parser focuses on extracting dialogue entries from the [Events] section.
     /// </summary>
     public class SsaParser : ISubtitleParser
     {
         // For backward compatibility:
+        /// <summary>
+        /// Parses an SSA stream using the specified encoding.
+        /// </summary>
+        /// <param name="ssaStream">A seekable and readable stream containing SSA subtitle data.</param>
+        /// <param name="encoding">The character encoding used to read the stream.</param>
+        /// <returns>A list of <see cref="SubtitleItem"/> objects parsed from the stream.</returns>
         public List<SubtitleItem> ParseStream(Stream ssaStream, Encoding encoding)
         {
             return ParseStream(ssaStream, new SubtitleParserOptions { Encoding = encoding, TimecodeMode = SubtitleTimecodeMode.Required });
         }
 
+        /// <summary>
+        /// Parses an SSA stream using the provided parser options.
+        /// </summary>
+        /// <param name="ssaStream">A seekable and readable stream containing SSA subtitle data.</param>
+        /// <param name="options">Parser options including encoding and timecode mode.</param>
+        /// <returns>A list of <see cref="SubtitleItem"/> objects extracted from the stream.</returns>
+        /// <exception cref="ArgumentException">Thrown if the stream is not readable/seekable or if the format is invalid.</exception>
         public List<SubtitleItem> ParseStream(Stream ssaStream, SubtitleParserOptions options)
         {
             if (!ssaStream.CanRead || !ssaStream.CanSeek)
@@ -74,6 +90,7 @@ namespace SpongeEngine.SubtitleSharp.Parsers
                                     if (!string.IsNullOrEmpty(textLine))
                                     {
                                         List<string> lines;
+                                        // Choose splitting strategy based on wrap style.
                                         switch (wrapStyle)
                                         {
                                             case SsaWrapStyle.Smart:
@@ -122,11 +139,16 @@ namespace SpongeEngine.SubtitleSharp.Parsers
             }
             else
             {
-                string message = string.Format("We reached line '{0}' with line number #{1} without finding the Event section ({2})", line, lineNumber, SsaFormatConstants.EVENT_LINE);
+                string message = string.Format("Reached end of header at line '{0}' (line #{1}) without finding the Event section ({2})", line, lineNumber, SsaFormatConstants.EVENT_LINE);
                 throw new ArgumentException(message);
             }
         }
 
+        /// <summary>
+        /// Parses an SSA timecode string into its equivalent value in milliseconds.
+        /// </summary>
+        /// <param name="s">The SSA timecode string to parse.</param>
+        /// <returns>The timecode in milliseconds, or -1 if parsing fails.</returns>
         private int ParseSsaTimecode(string s)
         {
             if (TimeSpan.TryParse(s, out TimeSpan result))

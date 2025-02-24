@@ -1,24 +1,31 @@
 ﻿namespace SpongeEngine.SubtitleSharp.Writers
 {
     /// <summary>
-    /// Interface specifying the required method for a SubWriter
+    /// Defines methods required for writing subtitle items to a stream.
     /// </summary>
     public interface ISubtitleWriter
     {
         /// <summary>
-        /// Writes a list of SubtitleItems into a stream 
+        /// Writes a collection of subtitle items to a stream.
         /// </summary>
-        /// <param name="stream">the stream to write to</param>
-        /// <param name="subtitleItems">the SubtitleItems to write</param>
-        /// <param name="includeFormatting">if formatting codes should be included when writing the subtitle item lines. Each subtitle item must have the PlaintextLines property set.</param>
+        /// <param name="stream">The output stream.</param>
+        /// <param name="subtitleItems">The subtitle items to write.</param>
+        /// <param name="includeFormatting">
+        /// Indicates whether formatting codes should be included. If set to <c>false</c>, it is expected that
+        /// <see cref="SubtitleItem.PlaintextLines"/> is populated.
+        /// </param>
         void WriteStream(Stream stream, IEnumerable<SubtitleItem> subtitleItems, bool includeFormatting = true);
 
         /// <summary>
-        /// Asynchronously writes a list of SubtitleItems into a stream 
+        /// Asynchronously writes a collection of subtitle items to a stream.
         /// </summary>
-        /// <param name="stream">the stream to write to</param>
-        /// <param name="subtitleItems">the SubtitleItems to write</param>
-        /// <param name="includeFormatting">if formatting codes should be included when writing the subtitle item lines. Each subtitle item must have the PlaintextLines property set.</param>
+        /// <param name="stream">The output stream.</param>
+        /// <param name="subtitleItems">The subtitle items to write.</param>
+        /// <param name="includeFormatting">
+        /// Indicates whether formatting codes should be included. If set to <c>false</c>, it is expected that
+        /// <see cref="SubtitleItem.PlaintextLines"/> is populated.
+        /// </param>
+        /// <returns>A task representing the asynchronous write operation.</returns>
         Task WriteStreamAsync(Stream stream, IEnumerable<SubtitleItem> subtitleItems, bool includeFormatting = true);
     }
 }

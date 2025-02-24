@@ -3,6 +3,12 @@ using System.Text.RegularExpressions;
 
 namespace SpongeEngine.SubtitleSharp.Parsers
 {
+    /// <summary>
+    /// Provides functionality for parsing subtitles from various formats.
+    /// 
+    /// This class selects the appropriate subtitle parser based on file extension or preferred format
+    /// and delegates parsing to the underlying format-specific parser.
+    /// </summary>
     public class SubtitleParser
     {
         private readonly Dictionary<SubtitlesFormat, ISubtitleParser> _subFormatToParser = new Dictionary<SubtitlesFormat, ISubtitleParser>
@@ -12,11 +18,18 @@ namespace SpongeEngine.SubtitleSharp.Parsers
             { SubtitlesFormat.WebVttFormat, new VttParser() },
         };
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SubtitleParser"/> class.
+        /// </summary>
         public SubtitleParser() { }
 
         /// <summary>
-        /// Gets the most likely format based on the file’s extension.
+        /// Determines the most likely subtitle format based on the file extension.
         /// </summary>
+        /// <param name="fileName">The subtitle file name.</param>
+        /// <returns>
+        /// A <see cref="SubtitlesFormat"/> that best matches the file extension, or <c>null</c> if no match is found.
+        /// </returns>
         public SubtitlesFormat GetMostLikelyFormat(string fileName)
         {
             string extension = Path.GetExtension(fileName);
@@ -33,6 +46,14 @@ namespace SpongeEngine.SubtitleSharp.Parsers
             return null;
         }
 
+        /// <summary>
+        /// Parses subtitle content provided as a string.
+        /// </summary>
+        /// <param name="subtitleContent">The subtitle content.</param>
+        /// <param name="encoding">The text encoding (defaults to UTF-8 if null).</param>
+        /// <param name="preferredFormat">An optional preferred subtitle format.</param>
+        /// <returns>A list of <see cref="SubtitleItem"/> objects extracted from the content.</returns>
+        /// <exception cref="ArgumentException">Thrown if the subtitle content is null or empty.</exception>
         public List<SubtitleItem> ParseText(string subtitleContent, Encoding? encoding = null, SubtitlesFormat? preferredFormat = null)
         {
             if (string.IsNullOrWhiteSpace(subtitleContent))
@@ -43,11 +64,23 @@ namespace SpongeEngine.SubtitleSharp.Parsers
             return ParseStream(stream, new SubtitleParserOptions { Encoding = encoding, TimecodeMode = SubtitleTimecodeMode.Required }, preferredFormat);
         }
 
+        /// <summary>
+        /// Parses subtitles from a stream using default options (UTF-8 and required timecodes).
+        /// </summary>
+        /// <param name="stream">The input stream containing subtitle data.</param>
+        /// <returns>A list of <see cref="SubtitleItem"/> objects parsed from the stream.</returns>
         public List<SubtitleItem> ParseStream(Stream stream)
         {
             return ParseStream(stream, new SubtitleParserOptions { Encoding = Encoding.UTF8, TimecodeMode = SubtitleTimecodeMode.Required });
         }
 
+        /// <summary>
+        /// Parses subtitles from a stream using the specified options and an optional preferred format.
+        /// </summary>
+        /// <param name="stream">The input stream containing subtitle data.</param>
+        /// <param name="options">Parser options including encoding and timecode mode.</param>
+        /// <param name="subFormat">An optional preferred subtitle format to prioritize during parsing.</param>
+        /// <returns>A list of <see cref="SubtitleItem"/> objects extracted from the stream.</returns>
         public List<SubtitleItem> ParseStream(Stream stream, SubtitleParserOptions options, SubtitlesFormat subFormat = null)
         {
             Dictionary<SubtitlesFormat, ISubtitleParser> dictionary = subFormat != null ?
@@ -59,6 +92,16 @@ namespace SpongeEngine.SubtitleSharp.Parsers
             return ParseStream(stream, options, dictionary);
         }
 
+        /// <summary>
+        /// Iterates through available subtitle parsers to extract subtitle items from the stream.
+        /// </summary>
+        /// <param name="stream">The input stream containing subtitle data.</param>
+        /// <param name="options">Parser options including encoding and timecode mode.</param>
+        /// <param name="subFormatDictionary">A dictionary mapping subtitle formats to their respective parsers.</param>
+        /// <returns>A list of <see cref="SubtitleItem"/> objects parsed from the stream.</returns>
+        /// <exception cref="ArgumentException">
+        /// Thrown if the stream is not readable or if no parser can successfully extract subtitle items.
+        /// </exception>
         public List<SubtitleItem> ParseStream(Stream stream, SubtitleParserOptions options, Dictionary<SubtitlesFormat, ISubtitleParser> subFormatDictionary)
         {
             if (!stream.CanRead)
@@ -85,7 +128,7 @@ namespace SpongeEngine.SubtitleSharp.Parsers
                 }
                 catch (Exception)
                 {
-                    // Continue with next parser.
+                    // Continue with next parser if current fails.
                     continue;
                 }
             }
@@ -97,6 +140,13 @@ namespace SpongeEngine.SubtitleSharp.Parsers
             throw new ArgumentException(message);
         }
 
+        /// <summary>
+        /// Logs the first few characters of the stream for diagnostic purposes.
+        /// </summary>
+        /// <param name="stream">The input stream.</param>
+        /// <param name="nbOfCharactersToPrint">The number of characters to log.</param>
+        /// <param name="encoding">The encoding used to read the stream.</param>
+        /// <returns>A string containing the initial part of the stream.</returns>
         private string LogFirstCharactersOfStream(Stream stream, int nbOfCharactersToPrint, Encoding encoding)
         {
             string message = "";

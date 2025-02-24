@@ -3,18 +3,47 @@ using System.Text.RegularExpressions;
 
 namespace SpongeEngine.SubtitleSharp.Parsers
 {
+    /// <summary>
+    /// Implements parsing for SubRip (SRT) subtitle files.
+    /// 
+    /// An SRT file typically has the following structure:
+    /// 
+    ///     1
+    ///     00:18:03,875 --> 00:18:04,231
+    ///     Oh?
+    ///     
+    ///     2
+    ///     00:18:05,194 --> 00:18:05,905
+    ///     What was that?
+    /// </summary>
     public class SrtParser : ISubtitleParser
     {
         private static readonly string[] _timecodeDelimiters = { "-->", "- >", "->" };
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SrtParser"/> class.
+        /// </summary>
         public SrtParser() { }
 
         // For backward compatibility:
+        /// <summary>
+        /// Parses an SRT stream using the specified encoding.
+        /// </summary>
+        /// <param name="srtStream">A seekable and readable stream containing SRT data.</param>
+        /// <param name="encoding">The character encoding used to read the stream.</param>
+        /// <returns>A list of <see cref="SubtitleItem"/> objects parsed from the stream.</returns>
         public List<SubtitleItem> ParseStream(Stream srtStream, Encoding encoding)
         {
             return ParseStream(srtStream, new SubtitleParserOptions { Encoding = encoding, TimecodeMode = SubtitleTimecodeMode.Required });
         }
 
+        /// <summary>
+        /// Parses an SRT stream using the provided parser options.
+        /// </summary>
+        /// <param name="srtStream">A seekable and readable stream containing SRT data.</param>
+        /// <param name="options">Options specifying encoding and timecode mode.</param>
+        /// <returns>A list of <see cref="SubtitleItem"/> objects extracted from the stream.</returns>
+        /// <exception cref="ArgumentException">Thrown if the stream is not readable/seekable or if a subtitle block is invalid.</exception>
         public List<SubtitleItem> ParseStream(Stream srtStream, SubtitleParserOptions options)
         {
             if (!srtStream.CanRead || !srtStream.CanSeek)
@@ -40,7 +69,7 @@ namespace SpongeEngine.SubtitleSharp.Parsers
                 bool timecodeFound = false;
                 foreach (string line in lines)
                 {
-                    Console.WriteLine($"[DEBUG] Parsing line: {line}");
+                    // Debug logging can be enabled here if needed.
                     if (!timecodeFound)
                     {
                         int startTc, endTc;
@@ -56,7 +85,6 @@ namespace SpongeEngine.SubtitleSharp.Parsers
                             }
                             else
                             {
-                                Console.WriteLine($"[DEBUG] Timecode parsing failed for line: {line}");
                                 throw new ArgumentException($"Invalid timecode in line: {line}");
                             }
                         }
@@ -87,6 +115,11 @@ namespace SpongeEngine.SubtitleSharp.Parsers
             return items;
         }
 
+        /// <summary>
+        /// Splits the SRT file into individual subtitle blocks using blank lines as delimiters.
+        /// </summary>
+        /// <param name="reader">A <see cref="TextReader"/> for the SRT file.</param>
+        /// <returns>An enumerable sequence of subtitle block strings.</returns>
         private IEnumerable<string> GetSrtSubTitleParts(TextReader reader)
         {
             string line;
@@ -109,11 +142,16 @@ namespace SpongeEngine.SubtitleSharp.Parsers
                 yield return stringBuilder.ToString();
         }
 
+        /// <summary>
+        /// Attempts to parse a timecode line in an SRT block into start and end timecodes.
+        /// </summary>
+        /// <param name="line">A line expected to contain two timecodes separated by a delimiter.</param>
+        /// <param name="startTc">Output start timecode (in milliseconds) if parsing succeeds; otherwise -1.</param>
+        /// <param name="endTc">Output end timecode (in milliseconds) if parsing succeeds; otherwise -1.</param>
+        /// <returns><c>true</c> if parsing is successful; otherwise, <c>false</c>.</returns>
         public static bool TryParseTimecodeLine(string line, out int startTc, out int endTc)
         {
             string[] parts = line.Split(_timecodeDelimiters, StringSplitOptions.None);
-            Console.WriteLine($"Line: {line}");
-            Console.WriteLine($"Parts: {string.Join(" | ", parts)}");
             if (parts.Length != 2)
             {
                 startTc = -1;
@@ -122,10 +160,14 @@ namespace SpongeEngine.SubtitleSharp.Parsers
             }
             startTc = ParseSrtTimecode(parts[0].Trim());
             endTc = ParseSrtTimecode(parts[1].Trim());
-            Console.WriteLine($"Start Timecode: {startTc}, End Timecode: {endTc}");
             return startTc != -1 && endTc != -1;
         }
 
+        /// <summary>
+        /// Parses an SRT timecode string into its equivalent value in milliseconds.
+        /// </summary>
+        /// <param name="s">An SRT timecode string in the format hh:mm:ss,fff.</param>
+        /// <returns>The timecode in milliseconds, or -1 if parsing fails.</returns>
         public static int ParseSrtTimecode(string s)
         {
             Match match = Regex.Match(s, @"^(\d{2}):(\d{2}):(\d{2}),(\d{3})$");
@@ -135,12 +177,10 @@ namespace SpongeEngine.SubtitleSharp.Parsers
                 int minutes = int.Parse(match.Groups[2].Value);
                 int seconds = int.Parse(match.Groups[3].Value);
                 int milliseconds = int.Parse(match.Groups[4].Value);
-                Console.WriteLine($"Parsed timecode: {hours}:{minutes}:{seconds},{milliseconds}");
                 return (int)(new TimeSpan(hours, minutes, seconds).TotalMilliseconds + milliseconds);
             }
             else
             {
-                Console.WriteLine($"Failed to parse timecode: {s}");
                 return -1;
             }
         }
