@@ -5,14 +5,15 @@
 [![License](https://img.shields.io/github/license/SpongeEngine/SubtitleSharp)](LICENSE)
 [![.NET](https://img.shields.io/badge/.NET-6.0%20%7C%207.0%20%7C%208.0%2B-512BD4)](https://dotnet.microsoft.com/download)
 
-C# library for parsing and handling subtitle files (e.g., SRT, VTT, ASS).
+SubtitleSharp is a robust C# library for parsing and writing subtitle files. It supports multiple subtitle formats—including SubRip (SRT), WebVTT (VTT), and SubStation Alpha (SSA)—and provides a unified API for both synchronous and asynchronous subtitle processing.
+
 
 ## Features
-- Supports parsing subtitle formats including **SubRip (SRT)**, **WebVTT (VTT)**, and **SubStation Alpha (ASS)**.
-- Converts subtitle files to structured data (`SubtitleItem`) for easy processing.
-- Handles timecode validation and parsing.
-- Cross-platform compatibility with .NET 6.0+.
-- Async/await support for non-blocking subtitle processing.
+- **Multi-Format Support:** Parse and write subtitles in SRT, VTT, and SSA formats.
+- **Unified Parsing API:** Automatically detect and parse subtitles via file extension or by specifying a preferred format using the `SubtitleParser` class.
+- **Customizable Options:** Configure parsing behavior using `SubtitleParserOptions` and control timecode requirements with `SubtitleTimecodeMode`.
+- **Asynchronous Processing:** Fully supports async/await for non-blocking I/O operations.
+- **Cross-Platform Compatibility:** Works with .NET 6.0, .NET 7.0, and .NET 8.0+.
 
 📦 [View Package on NuGet](https://www.nuget.org/packages/SpongeEngine.SubtitleSharp)
 
@@ -22,59 +23,108 @@ Install via NuGet:
 dotnet add package SpongeEngine.SubtitleSharp
 ```
 
-## Quick Start
-
-### Basic Usage
+**Automatic Format Detection**
 ```csharp
+using System.Text;
 using SpongeEngine.SubtitleSharp;
 
-// Parse an SRT file into structured subtitle items
-var srtFilePath = "path_to_subtitle.srt";
-using var fileStream = new FileStream(srtFilePath, FileMode.Open, FileAccess.Read);
-var parser = new SrtParser();
-var subtitleItems = parser.ParseStream(fileStream, Encoding.UTF8);
+// Open the subtitle file as a stream.
+using var fileStream = new FileStream("path_to_subtitle.srt", FileMode.Open, FileAccess.Read);
 
-// Output subtitle start and end times
+// Initialize the parser with default options.
+var parser = new SubtitleParser();
+
+// Parse the stream into a list of SubtitleItem objects.
+var subtitleItems = parser.ParseStream(fileStream, new SubtitleParserOptions { Encoding = Encoding.UTF8 });
+
+// Output subtitle start and end times.
 foreach (var item in subtitleItems)
 {
-    Console.WriteLine($"Start: {item.StartTime}, End: {item.EndTime}");
+    Console.WriteLine($"Start: {item.StartTime} ms, End: {item.EndTime} ms");
+    foreach (var line in item.Lines)
+    {
+        Console.WriteLine(line);
+    }
 }
 ```
 
-## Configuration
-### Parsing Options
+**Parsing from Text**
 ```csharp
-// Manually specify format for parsing
-SubtitlesFormat format = SubtitlesFormat.SubRipFormat;
+using System.Text;
+using SpongeEngine.SubtitleSharp;
+
+string subtitleContent = File.ReadAllText("path_to_subtitle.vtt", Encoding.UTF8);
+var subtitleItems = new SubtitleParser().ParseText(subtitleContent, Encoding.UTF8);
+```
+
+**Specifying a Preferred Format**
+```csharp
+using System.Text;
+using SpongeEngine.SubtitleSharp;
+
+// Specify the preferred format (e.g., SubRip for SRT files).
+var preferredFormat = SubtitlesFormat.SubRipFormat;
+
 using var fileStream = new FileStream("path_to_subtitle.srt", FileMode.Open, FileAccess.Read);
+var subtitleItems = new SubtitleParser().ParseStream(fileStream, new SubtitleParserOptions { Encoding = Encoding.UTF8 }, preferredFormat);
+```
+
+**Asynchronous Parsing**
+```csharp
+using System.Text;
+using SpongeEngine.SubtitleSharp;
+
+using var fileStream = new FileStream("path_to_subtitle.ssa", FileMode.Open, FileAccess.Read);
 var parser = new SubtitleParser();
-var subtitleItems = parser.ParseStream(fileStream, Encoding.UTF8, format);
+var subtitleItems = await parser.ParseStreamAsync(fileStream, new SubtitleParserOptions { Encoding = Encoding.UTF8 });
 ```
-### Error Handling
+**Writing SRT Files**
 ```csharp
-try
-{
-    var subtitleItems = parser.ParseStream(fileStream, Encoding.UTF8, format);
-}
-catch (ArgumentException ex)
-{
-    Console.WriteLine($"Error parsing subtitle: {ex.Message}");
-}
+using SpongeEngine.SubtitleSharp;
+using SpongeEngine.SubtitleSharp.Writers;
+
+// Assume subtitleItems is a List<SubtitleItem> obtained from parsing.
+using var outputStream = new FileStream("output.srt", FileMode.Create, FileAccess.Write);
+var srtWriter = new SrtWriter();
+srtWriter.WriteStream(outputStream, subtitleItems);
 ```
-### Logging
+
+**Writing SSA Files**
+```
+using SpongeEngine.SubtitleSharp;
+using SpongeEngine.SubtitleSharp.Writers;
+
+using var outputStream = new FileStream("output.ssa", FileMode.Create, FileAccess.Write);
+var ssaWriter = new SsaWriter();
+await ssaWriter.WriteStreamAsync(outputStream, subtitleItems);
+```
+
+**Logging and Error Handling**
 ```csharp
+using Microsoft.Extensions.Logging;
+using SpongeEngine.SubtitleSharp;
+
 ILogger logger = LoggerFactory
     .Create(builder => builder
         .AddConsole()
         .SetMinimumLevel(LogLevel.Debug))
     .CreateLogger<SubtitleParser>();
 
-// Example usage of logger in subtitle parsing
-var parser = new SubtitleParser(logger);
+try
+{
+    var parser = new SubtitleParser(logger);
+    using var fileStream = new FileStream("path_to_subtitle.srt", FileMode.Open, FileAccess.Read);
+    var subtitleItems = parser.ParseStream(fileStream, new SubtitleParserOptions { Encoding = Encoding.UTF8 });
+}
+catch (ArgumentException ex)
+{
+    Console.WriteLine($"Error parsing subtitle: {ex.Message}");
+}
+
 ```
 
 ### Testing
-To run the tests:
+To run the unit tests, execute:
 ```bash
 dotnet test
 ```
