@@ -22,8 +22,8 @@ Install via NuGet:
 ```bash
 dotnet add package SpongeEngine.SubtitleSharp
 ```
-
-**Automatic Format Detection**
+## Examples
+### Automatic Format Detection
 ```csharp
 using System.Text;
 using SpongeEngine.SubtitleSharp;
@@ -48,7 +48,7 @@ foreach (var item in subtitleItems)
 }
 ```
 
-**Parsing from Text**
+### Parsing from Text
 ```csharp
 using System.Text;
 using SpongeEngine.SubtitleSharp;
@@ -57,7 +57,7 @@ string subtitleContent = File.ReadAllText("path_to_subtitle.vtt", Encoding.UTF8)
 var subtitleItems = new SubtitleParser().ParseText(subtitleContent, Encoding.UTF8);
 ```
 
-**Specifying a Preferred Format**
+### Specifying a Preferred Format
 ```csharp
 using System.Text;
 using SpongeEngine.SubtitleSharp;
@@ -69,7 +69,7 @@ using var fileStream = new FileStream("path_to_subtitle.srt", FileMode.Open, Fil
 var subtitleItems = new SubtitleParser().ParseStream(fileStream, new SubtitleParserOptions { Encoding = Encoding.UTF8 }, preferredFormat);
 ```
 
-**Asynchronous Parsing**
+### Asynchronous Parsing
 ```csharp
 using System.Text;
 using SpongeEngine.SubtitleSharp;
@@ -78,7 +78,7 @@ using var fileStream = new FileStream("path_to_subtitle.ssa", FileMode.Open, Fil
 var parser = new SubtitleParser();
 var subtitleItems = await parser.ParseStreamAsync(fileStream, new SubtitleParserOptions { Encoding = Encoding.UTF8 });
 ```
-**Writing SRT Files**
+### Writing SRT Files
 ```csharp
 using SpongeEngine.SubtitleSharp;
 using SpongeEngine.SubtitleSharp.Writers;
@@ -89,7 +89,7 @@ var srtWriter = new SrtWriter();
 srtWriter.WriteStream(outputStream, subtitleItems);
 ```
 
-**Writing SSA Files**
+### Writing SSA Files
 ```
 using SpongeEngine.SubtitleSharp;
 using SpongeEngine.SubtitleSharp.Writers;
@@ -99,7 +99,7 @@ var ssaWriter = new SsaWriter();
 await ssaWriter.WriteStreamAsync(outputStream, subtitleItems);
 ```
 
-**Logging and Error Handling**
+### Logging and Error Handling
 ```csharp
 using Microsoft.Extensions.Logging;
 using SpongeEngine.SubtitleSharp;
