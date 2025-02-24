@@ -34,11 +34,11 @@ using var fileStream = new FileStream("path_to_subtitle.srt", FileMode.Open, Fil
 // Initialize the parser with default options.
 var parser = new SubtitleParser();
 
-// Parse the stream into a list of SubtitleItem objects.
-var subtitleItems = parser.ParseStream(fileStream, new SubtitleParserOptions { Encoding = Encoding.UTF8 });
+// Parse the stream into a list of SubtitleCue objects.
+var SubtitleCues = parser.ParseStream(fileStream, new SubtitleParserOptions { Encoding = Encoding.UTF8 });
 
 // Output subtitle start and end times.
-foreach (var item in subtitleItems)
+foreach (var item in SubtitleCues)
 {
     Console.WriteLine($"Start: {item.StartTime} ms, End: {item.EndTime} ms");
     foreach (var line in item.Lines)
@@ -54,7 +54,7 @@ using System.Text;
 using SpongeEngine.SubtitleSharp;
 
 string subtitleContent = File.ReadAllText("path_to_subtitle.vtt", Encoding.UTF8);
-var subtitleItems = new SubtitleParser().ParseText(subtitleContent, new SubtitleParserOptions {});
+var SubtitleCues = new SubtitleParser().ParseText(subtitleContent, new SubtitleParserOptions {});
 ```
 
 ### Specifying a Preferred Format
@@ -66,7 +66,7 @@ using SpongeEngine.SubtitleSharp;
 var preferredFormat = SubtitlesFormat.SubRipFormat;
 
 using var fileStream = new FileStream("path_to_subtitle.srt", FileMode.Open, FileAccess.Read);
-var subtitleItems = new SubtitleParser().ParseStream(fileStream, new SubtitleParserOptions { Encoding = Encoding.UTF8, PrioritizedSubtitleFormat = SubtitlesFormat.SubRipFormat });
+var SubtitleCues = new SubtitleParser().ParseStream(fileStream, new SubtitleParserOptions { Encoding = Encoding.UTF8, PrioritizedSubtitleFormat = SubtitlesFormat.SubRipFormat });
 ```
 
 ### Asynchronous Parsing
@@ -76,17 +76,17 @@ using SpongeEngine.SubtitleSharp;
 
 using var fileStream = new FileStream("path_to_subtitle.ssa", FileMode.Open, FileAccess.Read);
 var parser = new SubtitleParser();
-var subtitleItems = await parser.ParseStreamAsync(fileStream, new SubtitleParserOptions { Encoding = Encoding.UTF8 });
+var SubtitleCues = await parser.ParseStreamAsync(fileStream, new SubtitleParserOptions { Encoding = Encoding.UTF8 });
 ```
 ### Writing SRT Files
 ```csharp
 using SpongeEngine.SubtitleSharp;
 using SpongeEngine.SubtitleSharp.Writers;
 
-// Assume subtitleItems is a List<SubtitleItem> obtained from parsing.
+// Assume SubtitleCues is a List<SubtitleCue> obtained from parsing.
 using var outputStream = new FileStream("output.srt", FileMode.Create, FileAccess.Write);
 var srtWriter = new SrtWriter();
-srtWriter.WriteStream(outputStream, subtitleItems);
+srtWriter.WriteStream(outputStream, SubtitleCues);
 ```
 
 ### Writing SSA Files
@@ -96,7 +96,7 @@ using SpongeEngine.SubtitleSharp.Writers;
 
 using var outputStream = new FileStream("output.ssa", FileMode.Create, FileAccess.Write);
 var ssaWriter = new SsaWriter();
-await ssaWriter.WriteStreamAsync(outputStream, subtitleItems);
+await ssaWriter.WriteStreamAsync(outputStream, SubtitleCues);
 ```
 
 ### Logging and Error Handling
@@ -114,7 +114,7 @@ try
 {
     var parser = new SubtitleParser(logger);
     using var fileStream = new FileStream("path_to_subtitle.srt", FileMode.Open, FileAccess.Read);
-    var subtitleItems = parser.ParseStream(fileStream, new SubtitleParserOptions { Encoding = Encoding.UTF8 });
+    var SubtitleCues = parser.ParseStream(fileStream, new SubtitleParserOptions { Encoding = Encoding.UTF8 });
 }
 catch (ArgumentException ex)
 {
