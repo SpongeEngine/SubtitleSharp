@@ -54,7 +54,7 @@ using System.Text;
 using SpongeEngine.SubtitleSharp;
 
 string subtitleContent = File.ReadAllText("path_to_subtitle.vtt", Encoding.UTF8);
-var subtitleItems = new SubtitleParser().ParseText(subtitleContent, Encoding.UTF8);
+var subtitleItems = new SubtitleParser().ParseText(subtitleContent, new SubtitleParserOptions {});
 ```
 
 ### Specifying a Preferred Format
