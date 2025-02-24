@@ -134,7 +134,7 @@ namespace SpongeEngine.SubtitleSharp.Tests
             SrtParser parser = new SrtParser();
 
             // We expect an ArgumentException to be thrown due to the invalid timecode
-            ArgumentException exception = Assert.Throws<ArgumentException>(() => parser.ParseStream(invalidSrtStream, Encoding.UTF8));
+            ArgumentException exception = Assert.Throws<ArgumentException>(() => parser.ParseStream(invalidSrtStream, new SubtitleParserOptions() { Encoding = Encoding.UTF8, TimecodeMode = SubtitleTimecodeMode.Required, PrioritizedSubtitleFormat = SubtitlesFormat.SubRipFormat } ));
     
             // Ensure that the exception message contains the expected error message
             Assert.Contains("Invalid timecode in line", exception.Message);
@@ -231,7 +231,7 @@ namespace SpongeEngine.SubtitleSharp.Tests
             Some text"));
 
             SrtParser parser = new SrtParser();
-            Assert.Throws<ArgumentException>(() => parser.ParseStream(invalidSrtStream, Encoding.UTF8));
+            Assert.Throws<ArgumentException>(() => parser.ParseStream(invalidSrtStream, new SubtitleParserOptions() { Encoding = Encoding.UTF8, TimecodeMode = SubtitleTimecodeMode.Required, PrioritizedSubtitleFormat = SubtitlesFormat.SubRipFormat } ));
         }
 
         [Fact]
@@ -241,7 +241,7 @@ namespace SpongeEngine.SubtitleSharp.Tests
             00:00:01,000 --> 00:00:04,000"));
 
             SrtParser parser = new SrtParser();
-            Assert.Throws<ArgumentException>(() => parser.ParseStream(invalidSrtStream, Encoding.UTF8));
+            Assert.Throws<ArgumentException>(() => parser.ParseStream(invalidSrtStream, new SubtitleParserOptions() { Encoding = Encoding.UTF8, TimecodeMode = SubtitleTimecodeMode.Required, PrioritizedSubtitleFormat = SubtitlesFormat.SubRipFormat } ));
         }
         
         [Fact]
@@ -257,7 +257,7 @@ Subtitle line one
 Subtitle line two";
 
             // Use the new ParseText overload
-            List<SubtitleItem> items = _parser.ParseText(vttContent, Encoding.UTF8);
+            List<SubtitleItem> items = _parser.ParseText(vttContent, new SubtitleParserOptions() { Encoding = Encoding.UTF8, TimecodeMode = SubtitleTimecodeMode.Required, PrioritizedSubtitleFormat = SubtitlesFormat.WebVttFormat });
     
             Assert.NotEmpty(items);
             Assert.Equal(2, items.Count);

@@ -28,39 +28,12 @@
         };
 
         /// <summary>
-        /// The MicroDVD subtitle format.
-        /// </summary>
-        public static SubtitlesFormat MicroDvdFormat = new SubtitlesFormat()
-        {
-            Name = "MicroDvd",
-            Extension = @"\.sub"
-        };
-
-        /// <summary>
-        /// The SubViewer subtitle format.
-        /// </summary>
-        public static SubtitlesFormat SubViewerFormat = new SubtitlesFormat()
-        {
-            Name = "SubViewer",
-            Extension = @"\.sub"
-        };
-
-        /// <summary>
         /// The SubStation Alpha (SSA) subtitle format.
         /// </summary>
         public static SubtitlesFormat SubStationAlphaFormat = new SubtitlesFormat()
         {
             Name = "SubStationAlpha",
             Extension = @"\.ssa"
-        };
-
-        /// <summary>
-        /// The TTML subtitle format.
-        /// </summary>
-        public static SubtitlesFormat TtmlFormat = new SubtitlesFormat()
-        {
-            Name = "TTML",
-            Extension = @"\.ttml"
         };
 
         /// <summary>
@@ -73,26 +46,13 @@
         };
 
         /// <summary>
-        /// The YouTube XML subtitle format.
-        /// </summary>
-        public static SubtitlesFormat YoutubeXmlFormat = new SubtitlesFormat()
-        {
-            Name = "YoutubeXml",
-            //Extension can be defined if needed.
-        };
-
-        /// <summary>
         /// A list of all supported subtitle formats.
         /// </summary>
         public static List<SubtitlesFormat> SupportedSubtitlesFormats = new List<SubtitlesFormat>()
         {
             SubRipFormat,
-            MicroDvdFormat,
-            SubViewerFormat,
             SubStationAlphaFormat,
-            TtmlFormat,
             WebVttFormat,
-            YoutubeXmlFormat
         };
     }
 }

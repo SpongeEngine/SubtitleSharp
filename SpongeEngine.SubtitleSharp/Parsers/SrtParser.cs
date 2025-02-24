@@ -25,18 +25,6 @@ namespace SpongeEngine.SubtitleSharp.Parsers
         /// </summary>
         public SrtParser() { }
 
-        // For backward compatibility:
-        /// <summary>
-        /// Parses an SRT stream using the specified encoding.
-        /// </summary>
-        /// <param name="srtStream">A seekable and readable stream containing SRT data.</param>
-        /// <param name="encoding">The character encoding used to read the stream.</param>
-        /// <returns>A list of <see cref="SubtitleItem"/> objects parsed from the stream.</returns>
-        public List<SubtitleItem> ParseStream(Stream srtStream, Encoding encoding)
-        {
-            return ParseStream(srtStream, new SubtitleParserOptions { Encoding = encoding, TimecodeMode = SubtitleTimecodeMode.Required });
-        }
-
         /// <summary>
         /// Parses an SRT stream using the provided parser options.
         /// </summary>

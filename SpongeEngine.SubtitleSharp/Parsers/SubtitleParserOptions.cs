@@ -19,5 +19,10 @@ namespace SpongeEngine.SubtitleSharp.Parsers
         /// when set to <see cref="SubtitleTimecodeMode.Optional"/>, dummy timecodes will be assigned if missing.
         /// </summary>
         public SubtitleTimecodeMode TimecodeMode { get; set; } = SubtitleTimecodeMode.Required;
+        
+        /// <summary>
+        /// The subtitle format to prioritize during parsing.
+        /// </summary>
+        public SubtitlesFormat? PrioritizedSubtitleFormat { get; set; } = SubtitlesFormat.SubRipFormat;
     }
 }
