@@ -5,87 +5,53 @@ using SpongeEngine.SubtitleSharp.Utils;
 namespace SpongeEngine.SubtitleSharp.Parsers
 {
     /// <summary>
-    /// A parser for the SubStation Alpha subtitles format.
-    /// See http://en.wikipedia.org/wiki/SubStation_Alpha for complete explanations.
-    /// Ex:
-    /// [Script Info]
-    /// ; This is a Sub Station Alpha v4 script.
-    /// ; For Sub Station Alpha info and downloads,
-    /// ; go to http://www.eswat.demon.co.uk/
-    /// Title: Neon Genesis Evangelion - Episode 26 (neutral Spanish)
-    /// Original Script: RoRo
-    /// Script Updated By: version 2.8.01
-    /// ScriptType: v4.00
-    /// Collisions: Normal
-    /// PlayResY: 600
-    /// PlayDepth: 0
-    /// Timer: 100,0000
-    ///  
-    /// [V4 Styles]
-    /// Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, TertiaryColour, BackColour, Bold, Italic, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, AlphaLevel, Encoding
-    /// Style: DefaultVCD, Arial,28,11861244,11861244,11861244,-2147483640,-1,0,1,1,2,2,30,30,30,0,0
-    ///   
-    /// [Events]
-    /// Format: Marked, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
-    /// Dialogue: Marked=0,0:00:01.18,0:00:06.85,DefaultVCD, NTP,0000,0000,0000,,{\pos(400,570)}Like an angel with pity on nobody
+    /// Parser for SubStation Alpha (SSA) subtitle files.
     /// </summary>
     public class SsaParser : ISubtitleParser
     {
-
-        // Methods ------------------------------------------------------------------
-
+        // For backward compatibility:
         public List<SubtitleItem> ParseStream(Stream ssaStream, Encoding encoding)
         {
-            // test if stream if readable and seekable (just a check, should be good)
+            return ParseStream(ssaStream, new SubtitleParserOptions { Encoding = encoding, TimecodeMode = SubtitleTimecodeMode.Required });
+        }
+
+        public List<SubtitleItem> ParseStream(Stream ssaStream, SubtitleParserOptions options)
+        {
             if (!ssaStream.CanRead || !ssaStream.CanSeek)
             {
-                string message = string.Format("Stream must be seekable and readable in a subtitles parser. " +
-                                            "Operation interrupted; isSeekable: {0} - isReadable: {1}",
+                string message = string.Format("Stream must be seekable and readable in a subtitles parser. Operation interrupted; isSeekable: {0} - isReadable: {1}",
                                             ssaStream.CanSeek, ssaStream.CanRead);
                 throw new ArgumentException(message);
             }
 
-            // seek the beginning of the stream
             ssaStream.Position = 0;
-
-            StreamReader reader = new StreamReader(ssaStream, encoding, true);
-
-            // default wrap style to none if the header section doesn't contain a wrap style definition (very possible since it wasn't present in SSA, only ASS) 
+            StreamReader reader = new StreamReader(ssaStream, options.Encoding, true);
             SsaWrapStyle wrapStyle = SsaWrapStyle.None;
-
             string? line = reader.ReadLine();
             int lineNumber = 1;
-            // read the line until the [Events] section
             while (line != null && line != SsaFormatConstants.EVENT_LINE)
             {
                 if (line.StartsWith(SsaFormatConstants.WRAP_STYLE_PREFIX))
                 {
-                    // get the wrap style
-                    // the raw string is the second array item after splitting the line at `:` (which we know will be present since it's
-                    // included in the `WRAP_STYLE_PREFIX` const), so trim the space off the beginning of that item, and parse that string into the enum 
                     wrapStyle = line.Split(':')[1].TrimStart().FromString();
                 }
-
                 line = reader.ReadLine();
                 lineNumber++;
             }
 
             if (line != null)
             {
-                // we are at the event section
                 string? headerLine = reader.ReadLine();
                 if (!string.IsNullOrEmpty(headerLine))
                 {
                     List<string> columnHeaders = headerLine.Split(SsaFormatConstants.SEPARATOR).Select(head => head.Trim()).ToList();
-
                     int startIndexColumn = columnHeaders.IndexOf(SsaFormatConstants.START_COLUMN);
                     int endIndexColumn = columnHeaders.IndexOf(SsaFormatConstants.END_COLUMN);
                     int textIndexColumn = columnHeaders.IndexOf(SsaFormatConstants.TEXT_COLUMN);
-
                     if (startIndexColumn > 0 && endIndexColumn > 0 && textIndexColumn > 0)
                     {
                         List<SubtitleItem> items = new List<SubtitleItem>();
-
+                        int dummyTime = 0, defaultDuration = 1000;
                         line = reader.ReadLine();
                         while (line != null)
                         {
@@ -94,102 +60,78 @@ namespace SpongeEngine.SubtitleSharp.Parsers
                                 string[] columns = line.Split(SsaFormatConstants.SEPARATOR);
                                 string startText = columns[startIndexColumn];
                                 string endText = columns[endIndexColumn];
-
-
                                 string textLine = string.Join(",", columns.Skip(textIndexColumn));
-
                                 int start = ParseSsaTimecode(startText);
                                 int end = ParseSsaTimecode(endText);
-
-                                if (start > 0 && end > 0 && !string.IsNullOrEmpty(textLine))
+                                if ((start > 0 && end > 0) || options.TimecodeMode == SubtitleTimecodeMode.Optional)
                                 {
-                                    List<string> lines;
-                                    switch (wrapStyle)
+                                    if (start <= 0 || end <= 0)
                                     {
-                                        case SsaWrapStyle.Smart:
-                                        case SsaWrapStyle.SmartWideLowerLine:
-                                        case SsaWrapStyle.EndOfLine:
-                                            // according to the spec doc: 
-                                            // `\n` is ignored by SSA if smart-wrapping (and therefore smart with wider lower line) is enabled
-                                            // end-of-line word wrapping: only `\N` breaks
-                                            lines = textLine.Split(@"\N").ToList();
-                                            break;
-                                        case SsaWrapStyle.None:
-                                            // the default value of the variable is None, which breaks on either `\n` or `\N`
-
-                                            // according to the spec doc: 
-                                            // no word wrapping: `\n` `\N` both breaks
-                                            lines = Regex.Split(textLine, @"(?:\\n)|(?:\\N)").ToList(); // regex because there isn't an overload to take an array of strings to split on
-                                            break;
-                                        default:
-                                            throw new ArgumentOutOfRangeException();
+                                        start = dummyTime;
+                                        end = dummyTime + defaultDuration;
+                                        dummyTime += defaultDuration;
                                     }
-                                    
-                                    // trim any spaces from the start of a line (happens when a subtitler includes a space after a newline char ie `this is\N two lines` instead of `this is\Ntwo lines`)
-                                    // this doesn't actually matter for the SSA/ASS format, however if you were to want to convert from SSA/ASS to a format like SRT, it could lead to spaces preceding the second line, which looks funny 
-                                    lines = lines.Select(line => line.TrimStart()).ToList();
-
-                                    SubtitleItem subtitleItem = new SubtitleItem()
+                                    if (!string.IsNullOrEmpty(textLine))
                                     {
-                                        StartTime = start,
-                                        EndTime = end,
-                                        Lines = lines,
-                                        // strip formatting by removing anything within curly braces, this will not remove duplicate content however, which can happen when working with signs for example
-                                        PlaintextLines = lines.Select(subtitleLine => Regex.Replace(subtitleLine, @"\{.*?\}", string.Empty)).ToList()
-                                    };
-                                    items.Add(subtitleItem);
+                                        List<string> lines;
+                                        switch (wrapStyle)
+                                        {
+                                            case SsaWrapStyle.Smart:
+                                            case SsaWrapStyle.SmartWideLowerLine:
+                                            case SsaWrapStyle.EndOfLine:
+                                                lines = textLine.Split(@"\N").ToList();
+                                                break;
+                                            case SsaWrapStyle.None:
+                                                lines = Regex.Split(textLine, @"(?:\\n)|(?:\\N)").ToList();
+                                                break;
+                                            default:
+                                                throw new ArgumentOutOfRangeException();
+                                        }
+                                        lines = lines.Select(l => l.TrimStart()).ToList();
+                                        SubtitleItem subtitleItem = new SubtitleItem()
+                                        {
+                                            StartTime = start,
+                                            EndTime = end,
+                                            Lines = lines,
+                                            PlaintextLines = lines.Select(subtitleLine => Regex.Replace(subtitleLine, @"\{.*?\}", string.Empty)).ToList()
+                                        };
+                                        items.Add(subtitleItem);
+                                    }
                                 }
                             }
                             line = reader.ReadLine();
                         }
-
                         if (items.Any())
-                        {
                             return items;
-                        }
                         else
-                        {
                             throw new ArgumentException("Stream is not in a valid Ssa format");
-                        }
                     }
                     else
                     {
-                        string message = string.Format("Couldn't find all the necessary columns " +
-                                                       "headers ({0}, {1}, {2}) in header line {3}",
-                                                    SsaFormatConstants.START_COLUMN, SsaFormatConstants.END_COLUMN,
-                                                    SsaFormatConstants.TEXT_COLUMN, headerLine);
+                        string message = string.Format("Couldn't find all the necessary columns headers ({0}, {1}, {2}) in header line {3}",
+                                                        SsaFormatConstants.START_COLUMN, SsaFormatConstants.END_COLUMN,
+                                                        SsaFormatConstants.TEXT_COLUMN, headerLine);
                         throw new ArgumentException(message);
                     }
                 }
                 else
                 {
-                    string message = string.Format("The header line after the line '{0}' was null -> " +
-                                                   "no need to continue parsing", line);
+                    string message = string.Format("The header line after the line '{0}' was null -> no need to continue parsing", line);
                     throw new ArgumentException(message);
                 }
             }
             else
             {
-                string message = string.Format("We reached line '{0}' with line number #{1} without finding to " +
-                                               "Event section ({2})", line, lineNumber, SsaFormatConstants.EVENT_LINE);
+                string message = string.Format("We reached line '{0}' with line number #{1} without finding the Event section ({2})", line, lineNumber, SsaFormatConstants.EVENT_LINE);
                 throw new ArgumentException(message);
             }
         }
 
-        /// <summary>
-        /// Takes an SRT timecode as a string and parses it into a double (in seconds). A SRT timecode reads as follows: 
-        /// 00:00:20,000
-        /// </summary>
-        /// <param name="s">The timecode to parse</param>
-        /// <returns>The parsed timecode as a TimeSpan instance. If the parsing was unsuccessful, -1 is returned (subtitles should never show)</returns>
         private int ParseSsaTimecode(string s)
         {
-            TimeSpan result;
-
-            if (TimeSpan.TryParse(s, out result))
+            if (TimeSpan.TryParse(s, out TimeSpan result))
             {
-                int nbOfMs = (int)result.TotalMilliseconds;
-                return nbOfMs;
+                return (int)result.TotalMilliseconds;
             }
             else
             {

@@ -3,24 +3,18 @@
 namespace SpongeEngine.SubtitleSharp.Parsers
 {
     /// <summary>
-    /// Interface specifying the required method for a SubParser.
+    /// Interface specifying the required methods for a subtitle parser.
     /// </summary>
     public interface ISubtitleParser
     {
         /// <summary>
-        /// Parses a subtitles file stream in a list of SubtitleItem
+        /// Parses a subtitles file stream using the given encoding.
         /// </summary>
-        /// <param name="stream">The subtitles file stream to parse</param>
-        /// <param name="encoding">The stream encoding (if known)</param>
-        /// <returns>The corresponding list of SubtitleItems</returns>
         List<SubtitleItem> ParseStream(Stream stream, Encoding encoding);
 
-        // /// <summary>
-        // /// Parses a subtitles file stream in a list of SubtitleItem
-        // /// </summary>
-        // /// <param name="stream">The subtitles file stream to parse</param>
-        // /// <param name="encoding">The stream encoding (if known)</param>
-        // /// <returns>The corresponding list of SubtitleItems</returns>
-        // Task<List<SubtitleItem>> ParseStreamAsync(Stream stream, Encoding encoding);
+        /// <summary>
+        /// Parses a subtitles file stream using the specified options.
+        /// </summary>
+        List<SubtitleItem> ParseStream(Stream stream, SubtitleParserOptions options);
     }
 }

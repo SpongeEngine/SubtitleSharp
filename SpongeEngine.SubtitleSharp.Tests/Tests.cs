@@ -32,7 +32,7 @@ namespace SpongeEngine.SubtitleSharp.Tests
             using (FileStream fileStream = File.OpenRead(validVttFilePath))
             {
                 SubtitlesFormat format = _parser.GetMostLikelyFormat(validVttFilePath);
-                List<SubtitleItem> items = _parser.ParseStream(fileStream, Encoding.UTF8, format);
+                List<SubtitleItem> items = _parser.ParseStream(fileStream, new SubtitleParserOptions() { Encoding = Encoding.UTF8, TimecodeMode = SubtitleTimecodeMode.Required });
                 Assert.NotEmpty(items);
                 Assert.All(items, item =>
                 {
@@ -45,18 +45,36 @@ namespace SpongeEngine.SubtitleSharp.Tests
         [Fact]
         public void ShouldParseValidSrtFileSuccessfully()
         {
-            string validSrtFilePath = GetFilePath("Risitas - Las Paelleras (Extended Original).srt");
-        
-            using (FileStream fileStream = File.OpenRead(validSrtFilePath))
+            foreach (string srtFilePath in new string[] { GetFilePath("Risitas - Las Paelleras (Extended Original).srt") })
             {
-                SubtitlesFormat format = _parser.GetMostLikelyFormat(validSrtFilePath);
-                List<SubtitleItem> items = _parser.ParseStream(fileStream, Encoding.UTF8, format);
-                Assert.NotEmpty(items);
-                Assert.All(items, item =>
+                using (FileStream fileStream = File.OpenRead(srtFilePath))
                 {
-                    Assert.True(item.StartTime > 0);
-                    Assert.True(item.EndTime > 0);
-                });
+                    List<SubtitleItem> items = _parser.ParseStream(fileStream, new SubtitleParserOptions() { Encoding = Encoding.UTF8, TimecodeMode = SubtitleTimecodeMode.Required });
+                    foreach (var subtitleItem in items)
+                    {
+                        _output.WriteLine(subtitleItem.ToString());
+                    }
+                    
+                    Assert.NotEmpty(items);
+                    Assert.All(items, item =>
+                    {
+                        Assert.True(item.StartTime > 0);
+                        Assert.True(item.EndTime > 0);
+                    });
+                }
+            }
+            
+            foreach (string srtFilePath in new string[] { GetFilePath("Risitas - Las Paelleras (Extended Original)_no_timecodes.srt") })
+            {
+                using (FileStream fileStream = File.OpenRead(srtFilePath))
+                {
+                    List<SubtitleItem> items = _parser.ParseStream(fileStream, new SubtitleParserOptions() { Encoding = Encoding.UTF8, TimecodeMode = SubtitleTimecodeMode.Optional });
+                    foreach (var subtitleItem in items)
+                    {
+                        _output.WriteLine(subtitleItem.ToString());
+                    }
+                    Assert.NotEmpty(items);
+                }
             }
         }
 
@@ -68,7 +86,7 @@ namespace SpongeEngine.SubtitleSharp.Tests
             using (FileStream fileStream = File.OpenRead(validAssFilePath))
             {
                 SubtitlesFormat format = _parser.GetMostLikelyFormat(validAssFilePath);
-                List<SubtitleItem> items = _parser.ParseStream(fileStream, Encoding.UTF8, format);
+                List<SubtitleItem> items = _parser.ParseStream(fileStream, new SubtitleParserOptions() { Encoding = Encoding.UTF8, TimecodeMode = SubtitleTimecodeMode.Required });
                 Assert.NotEmpty(items);
                 Assert.All(items, item =>
                 {
@@ -87,7 +105,7 @@ namespace SpongeEngine.SubtitleSharp.Tests
             {
                 SubtitlesFormat format = _parser.GetMostLikelyFormat(invalidVttFilePath);
                 ArgumentException ex = Assert.Throws<ArgumentException>(() =>
-                    _parser.ParseStream(fileStream, Encoding.UTF8, format));
+                    _parser.ParseStream(fileStream, new SubtitleParserOptions() { Encoding = Encoding.UTF8, TimecodeMode = SubtitleTimecodeMode.Required }));
                 Assert.Contains("All the subtitles parsers failed to parse", ex.Message);
             }
         }
@@ -101,7 +119,7 @@ namespace SpongeEngine.SubtitleSharp.Tests
             {
                 SubtitlesFormat format = _parser.GetMostLikelyFormat(invalidSrtFilePath);
                 ArgumentException ex = Assert.Throws<ArgumentException>(() =>
-                    _parser.ParseStream(fileStream, Encoding.UTF8, format));
+                    _parser.ParseStream(fileStream, new SubtitleParserOptions() { Encoding = Encoding.UTF8, TimecodeMode = SubtitleTimecodeMode.Required }));
                 Assert.Contains("All the subtitles parsers failed to parse", ex.Message);
             }
         }
@@ -131,7 +149,7 @@ namespace SpongeEngine.SubtitleSharp.Tests
             {
                 SubtitlesFormat format = _parser.GetMostLikelyFormat(invalidAssFilePath);
                 ArgumentException ex = Assert.Throws<ArgumentException>(() =>
-                    _parser.ParseStream(fileStream, Encoding.UTF8, format));
+                    _parser.ParseStream(fileStream, new SubtitleParserOptions() { Encoding = Encoding.UTF8, TimecodeMode = SubtitleTimecodeMode.Required }));
                 Assert.Contains("All the subtitles parsers failed to parse", ex.Message);
             }
         }
