@@ -18,8 +18,8 @@ namespace SpongeEngine.SubtitleSharp.Parsers
         /// </summary>
         /// <param name="ssaStream">A seekable and readable stream containing SSA subtitle data.</param>
         /// <param name="encoding">The character encoding used to read the stream.</param>
-        /// <returns>A list of <see cref="SubtitleItem"/> objects parsed from the stream.</returns>
-        public List<SubtitleItem> ParseStream(Stream ssaStream, Encoding encoding)
+        /// <returns>A list of <see cref="SubtitleCue"/> objects parsed from the stream.</returns>
+        public List<SubtitleCue> ParseStream(Stream ssaStream, Encoding encoding)
         {
             return ParseStream(ssaStream, new SubtitleParserOptions { Encoding = encoding, TimecodeMode = SubtitleTimecodeMode.Required });
         }
@@ -29,9 +29,9 @@ namespace SpongeEngine.SubtitleSharp.Parsers
         /// </summary>
         /// <param name="ssaStream">A seekable and readable stream containing SSA subtitle data.</param>
         /// <param name="options">Parser options including encoding and timecode mode.</param>
-        /// <returns>A list of <see cref="SubtitleItem"/> objects extracted from the stream.</returns>
+        /// <returns>A list of <see cref="SubtitleCue"/> objects extracted from the stream.</returns>
         /// <exception cref="ArgumentException">Thrown if the stream is not readable/seekable or if the format is invalid.</exception>
-        public List<SubtitleItem> ParseStream(Stream ssaStream, SubtitleParserOptions options)
+        public List<SubtitleCue> ParseStream(Stream ssaStream, SubtitleParserOptions options)
         {
             if (!ssaStream.CanRead || !ssaStream.CanSeek)
             {
@@ -66,7 +66,7 @@ namespace SpongeEngine.SubtitleSharp.Parsers
                     int textIndexColumn = columnHeaders.IndexOf(SsaFormatConstants.TEXT_COLUMN);
                     if (startIndexColumn > 0 && endIndexColumn > 0 && textIndexColumn > 0)
                     {
-                        List<SubtitleItem> items = new List<SubtitleItem>();
+                        List<SubtitleCue> items = new List<SubtitleCue>();
                         int dummyTime = 0, defaultDuration = 1000;
                         line = reader.ReadLine();
                         while (line != null)
@@ -105,14 +105,14 @@ namespace SpongeEngine.SubtitleSharp.Parsers
                                                 throw new ArgumentOutOfRangeException();
                                         }
                                         lines = lines.Select(l => l.TrimStart()).ToList();
-                                        SubtitleItem subtitleItem = new SubtitleItem()
+                                        SubtitleCue subtitleCue = new SubtitleCue()
                                         {
                                             StartTime = start,
                                             EndTime = end,
                                             Lines = lines,
                                             PlaintextLines = lines.Select(subtitleLine => Regex.Replace(subtitleLine, @"\{.*?\}", string.Empty)).ToList()
                                         };
-                                        items.Add(subtitleItem);
+                                        items.Add(subtitleCue);
                                     }
                                 }
                             }

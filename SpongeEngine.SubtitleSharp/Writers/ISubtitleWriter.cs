@@ -12,9 +12,9 @@
         /// <param name="subtitleItems">The subtitle items to write.</param>
         /// <param name="includeFormatting">
         /// Indicates whether formatting codes should be included. If set to <c>false</c>, it is expected that
-        /// <see cref="SubtitleItem.PlaintextLines"/> is populated.
+        /// <see cref="SubtitleCue.PlaintextLines"/> is populated.
         /// </param>
-        void WriteStream(Stream stream, IEnumerable<SubtitleItem> subtitleItems, bool includeFormatting = true);
+        void WriteStream(Stream stream, IEnumerable<SubtitleCue> subtitleItems, bool includeFormatting = true);
 
         /// <summary>
         /// Asynchronously writes a collection of subtitle items to a stream.
@@ -23,9 +23,9 @@
         /// <param name="subtitleItems">The subtitle items to write.</param>
         /// <param name="includeFormatting">
         /// Indicates whether formatting codes should be included. If set to <c>false</c>, it is expected that
-        /// <see cref="SubtitleItem.PlaintextLines"/> is populated.
+        /// <see cref="SubtitleCue.PlaintextLines"/> is populated.
         /// </param>
         /// <returns>A task representing the asynchronous write operation.</returns>
-        Task WriteStreamAsync(Stream stream, IEnumerable<SubtitleItem> subtitleItems, bool includeFormatting = true);
+        Task WriteStreamAsync(Stream stream, IEnumerable<SubtitleCue> subtitleItems, bool includeFormatting = true);
     }
 }

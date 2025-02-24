@@ -39,8 +39,8 @@ namespace SpongeEngine.SubtitleSharp.Parsers
         /// </summary>
         /// <param name="vttStream">A seekable and readable stream containing WebVTT content.</param>
         /// <param name="encoding">The character encoding used to read the stream.</param>
-        /// <returns>A list of <see cref="SubtitleItem"/> objects parsed from the stream.</returns>
-        public List<SubtitleItem> ParseStream(Stream vttStream, Encoding encoding)
+        /// <returns>A list of <see cref="SubtitleCue"/> objects parsed from the stream.</returns>
+        public List<SubtitleCue> ParseStream(Stream vttStream, Encoding encoding)
         {
             return ParseStream(vttStream, new SubtitleParserOptions { Encoding = encoding, TimecodeMode = SubtitleTimecodeMode.Required });
         }
@@ -50,10 +50,10 @@ namespace SpongeEngine.SubtitleSharp.Parsers
         /// </summary>
         /// <param name="vttStream">A seekable and readable stream containing WebVTT content.</param>
         /// <param name="options">Parser options including encoding and timecode handling.</param>
-        /// <returns>A list of <see cref="SubtitleItem"/> objects extracted from the stream.</returns>
+        /// <returns>A list of <see cref="SubtitleCue"/> objects extracted from the stream.</returns>
         /// <exception cref="ArgumentException">Thrown if the stream is not readable or seekable.</exception>
         /// <exception cref="FormatException">Thrown if no valid subtitle cues are found.</exception>
-        public List<SubtitleItem> ParseStream(Stream vttStream, SubtitleParserOptions options)
+        public List<SubtitleCue> ParseStream(Stream vttStream, SubtitleParserOptions options)
         {
             if (!vttStream.CanRead || !vttStream.CanSeek)
             {
@@ -65,7 +65,7 @@ namespace SpongeEngine.SubtitleSharp.Parsers
             // Reset stream position and create a reader.
             vttStream.Position = 0;
             StreamReader reader = new StreamReader(vttStream, options.Encoding, detectEncodingFromByteOrderMarks: true);
-            List<SubtitleItem> items = new List<SubtitleItem>();
+            List<SubtitleCue> items = new List<SubtitleCue>();
             IEnumerator<string> vttSubParts = GetVttSubTitleParts(reader).GetEnumerator();
             int dummyTime = 0, defaultDuration = 1000;
 
@@ -82,7 +82,7 @@ namespace SpongeEngine.SubtitleSharp.Parsers
                     .Select(s => s.Trim())
                     .Where(l => !string.IsNullOrEmpty(l));
 
-                SubtitleItem subtitleItem = new SubtitleItem();
+                SubtitleCue subtitleCue = new SubtitleCue();
                 bool timecodeFound = false;
                 foreach (string line in lines)
                 {
@@ -92,15 +92,15 @@ namespace SpongeEngine.SubtitleSharp.Parsers
                         bool success = TryParseTimecodeLine(line, out int startTc, out int endTc);
                         if (success)
                         {
-                            subtitleItem.StartTime = startTc;
-                            subtitleItem.EndTime = endTc;
+                            subtitleCue.StartTime = startTc;
+                            subtitleCue.EndTime = endTc;
                             timecodeFound = true;
                         }
                         else if (options.TimecodeMode == SubtitleTimecodeMode.Optional)
                         {
                             // When timecodes are optional, assign dummy timecodes.
-                            subtitleItem.StartTime = dummyTime;
-                            subtitleItem.EndTime = dummyTime + defaultDuration;
+                            subtitleCue.StartTime = dummyTime;
+                            subtitleCue.EndTime = dummyTime + defaultDuration;
                             dummyTime += defaultDuration;
                             timecodeFound = true;
                         }
@@ -108,14 +108,14 @@ namespace SpongeEngine.SubtitleSharp.Parsers
                     else
                     {
                         // Subsequent lines are considered subtitle text.
-                        subtitleItem.Lines.Add(line);
+                        subtitleCue.Lines.Add(line);
                     }
                 }
 
                 // Add the cue if valid timecodes and at least one text line are present.
-                if ((subtitleItem.StartTime != 0 || subtitleItem.EndTime != 0) && subtitleItem.Lines.Any())
+                if ((subtitleCue.StartTime != 0 || subtitleCue.EndTime != 0) && subtitleCue.Lines.Any())
                 {
-                    items.Add(subtitleItem);
+                    items.Add(subtitleCue);
                 }
             }
             while (vttSubParts.MoveNext());
@@ -134,9 +134,9 @@ namespace SpongeEngine.SubtitleSharp.Parsers
         /// <param name="vttStream">A seekable and readable stream containing WebVTT content.</param>
         /// <param name="encoding">The character encoding used to read the stream.</param>
         /// <returns>
-        /// A task representing the asynchronous operation, with a list of <see cref="SubtitleItem"/> objects as its result.
+        /// A task representing the asynchronous operation, with a list of <see cref="SubtitleCue"/> objects as its result.
         /// </returns>
-        public async Task<List<SubtitleItem>> ParseStreamAsync(Stream vttStream, Encoding encoding)
+        public async Task<List<SubtitleCue>> ParseStreamAsync(Stream vttStream, Encoding encoding)
         {
             return await ParseStreamAsync(vttStream, new SubtitleParserOptions { Encoding = encoding, TimecodeMode = SubtitleTimecodeMode.Required });
         }
@@ -147,11 +147,11 @@ namespace SpongeEngine.SubtitleSharp.Parsers
         /// <param name="vttStream">A seekable and readable stream containing WebVTT content.</param>
         /// <param name="options">Parser options including encoding and timecode handling.</param>
         /// <returns>
-        /// A task representing the asynchronous operation, with a list of <see cref="SubtitleItem"/> objects extracted from the stream.
+        /// A task representing the asynchronous operation, with a list of <see cref="SubtitleCue"/> objects extracted from the stream.
         /// </returns>
         /// <exception cref="ArgumentException">Thrown if the stream is not readable or seekable.</exception>
         /// <exception cref="FormatException">Thrown if no valid subtitle cues are found.</exception>
-        public async Task<List<SubtitleItem>> ParseStreamAsync(Stream vttStream, SubtitleParserOptions options)
+        public async Task<List<SubtitleCue>> ParseStreamAsync(Stream vttStream, SubtitleParserOptions options)
         {
             if (!vttStream.CanRead || !vttStream.CanSeek)
             {
@@ -163,7 +163,7 @@ namespace SpongeEngine.SubtitleSharp.Parsers
             // Reset stream position and create a reader.
             vttStream.Position = 0;
             StreamReader reader = new StreamReader(vttStream, options.Encoding, detectEncodingFromByteOrderMarks: true);
-            List<SubtitleItem> items = new List<SubtitleItem>();
+            List<SubtitleCue> items = new List<SubtitleCue>();
             IAsyncEnumerator<string> vttBlockEnumerator = GetVttSubTitlePartsAsync(reader).GetAsyncEnumerator();
             int dummyTime = 0, defaultDuration = 1000;
 
@@ -179,7 +179,7 @@ namespace SpongeEngine.SubtitleSharp.Parsers
                     .Select(s => s.Trim())
                     .Where(l => !string.IsNullOrEmpty(l));
 
-                SubtitleItem subtitleItem = new SubtitleItem();
+                SubtitleCue subtitleCue = new SubtitleCue();
                 bool timecodeFound = false;
                 foreach (string line in lines)
                 {
@@ -188,27 +188,27 @@ namespace SpongeEngine.SubtitleSharp.Parsers
                         bool success = TryParseTimecodeLine(line, out int startTc, out int endTc);
                         if (success)
                         {
-                            subtitleItem.StartTime = startTc;
-                            subtitleItem.EndTime = endTc;
+                            subtitleCue.StartTime = startTc;
+                            subtitleCue.EndTime = endTc;
                             timecodeFound = true;
                         }
                         else if (options.TimecodeMode == SubtitleTimecodeMode.Optional)
                         {
-                            subtitleItem.StartTime = dummyTime;
-                            subtitleItem.EndTime = dummyTime + defaultDuration;
+                            subtitleCue.StartTime = dummyTime;
+                            subtitleCue.EndTime = dummyTime + defaultDuration;
                             dummyTime += defaultDuration;
                             timecodeFound = true;
                         }
                     }
                     else
                     {
-                        subtitleItem.Lines.Add(line);
+                        subtitleCue.Lines.Add(line);
                     }
                 }
 
-                if ((subtitleItem.StartTime != 0 || subtitleItem.EndTime != 0) && subtitleItem.Lines.Any())
+                if ((subtitleCue.StartTime != 0 || subtitleCue.EndTime != 0) && subtitleCue.Lines.Any())
                 {
-                    items.Add(subtitleItem);
+                    items.Add(subtitleCue);
                 }
             }
             while (await vttBlockEnumerator.MoveNextAsync());

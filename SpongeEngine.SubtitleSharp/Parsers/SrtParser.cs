@@ -30,16 +30,16 @@ namespace SpongeEngine.SubtitleSharp.Parsers
         /// </summary>
         /// <param name="srtStream">A seekable and readable stream containing SRT data.</param>
         /// <param name="options">Options specifying encoding and timecode mode.</param>
-        /// <returns>A list of <see cref="SubtitleItem"/> objects extracted from the stream.</returns>
+        /// <returns>A list of <see cref="SubtitleCue"/> objects extracted from the stream.</returns>
         /// <exception cref="ArgumentException">Thrown if the stream is not readable/seekable or if a subtitle block is invalid.</exception>
-        public List<SubtitleItem> ParseStream(Stream srtStream, SubtitleParserOptions options)
+        public List<SubtitleCue> ParseStream(Stream srtStream, SubtitleParserOptions options)
         {
             if (!srtStream.CanRead || !srtStream.CanSeek)
                 throw new ArgumentException("Stream must be seekable and readable.");
 
             srtStream.Position = 0;
             StreamReader reader = new StreamReader(srtStream, options.Encoding, detectEncodingFromByteOrderMarks: true);
-            List<SubtitleItem> items = new List<SubtitleItem>();
+            List<SubtitleCue> items = new List<SubtitleCue>();
             List<string> srtSubParts = GetSrtSubTitleParts(reader).ToList();
             if (!srtSubParts.Any())
                 throw new FormatException("Parsing as SRT returned no subtitle parts.");
@@ -53,7 +53,7 @@ namespace SpongeEngine.SubtitleSharp.Parsers
                     .Where(l => !string.IsNullOrWhiteSpace(l))
                     .ToList();
 
-                SubtitleItem item = new SubtitleItem();
+                SubtitleCue cue = new SubtitleCue();
                 bool timecodeFound = false;
                 foreach (string line in lines)
                 {
@@ -78,21 +78,21 @@ namespace SpongeEngine.SubtitleSharp.Parsers
                         }
                         else
                         {
-                            item.StartTime = startTc;
-                            item.EndTime = endTc;
+                            cue.StartTime = startTc;
+                            cue.EndTime = endTc;
                             timecodeFound = true;
                             continue;
                         }
                     }
                     else
                     {
-                        item.Lines.Add(line);
-                        item.PlaintextLines.Add(Regex.Replace(line, @"\{.*?\}|<.*?>", string.Empty));
+                        cue.Lines.Add(line);
+                        cue.PlaintextLines.Add(Regex.Replace(line, @"\{.*?\}|<.*?>", string.Empty));
                     }
                 }
 
-                if (timecodeFound && item.Lines.Any())
-                    items.Add(item);
+                if (timecodeFound && cue.Lines.Any())
+                    items.Add(cue);
                 else if (options.TimecodeMode != SubtitleTimecodeMode.Optional)
                     throw new ArgumentException($"Subtitle block with missing or invalid timecode or text: {string.Join(", ", lines)}");
             }

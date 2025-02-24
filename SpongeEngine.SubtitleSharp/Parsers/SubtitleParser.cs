@@ -52,9 +52,9 @@ namespace SpongeEngine.SubtitleSharp.Parsers
         /// </summary>
         /// <param name="subtitleContent">The subtitle content.</param>
         /// <param name="subtitleParserOptions">Subtitle parser options.</param>
-        /// <returns>A list of <see cref="SubtitleItem"/> objects extracted from the content.</returns>
+        /// <returns>A list of <see cref="SubtitleCue"/> objects extracted from the content.</returns>
         /// <exception cref="ArgumentException">Thrown if the subtitle content is null or empty.</exception>
-        public List<SubtitleItem> ParseText(string subtitleContent, SubtitleParserOptions subtitleParserOptions)
+        public List<SubtitleCue> ParseText(string subtitleContent, SubtitleParserOptions subtitleParserOptions)
         {
             if (string.IsNullOrWhiteSpace(subtitleContent))
             {
@@ -69,8 +69,8 @@ namespace SpongeEngine.SubtitleSharp.Parsers
         /// Parses subtitles from a stream using default options (UTF-8 and required timecodes).
         /// </summary>
         /// <param name="stream">The input stream containing subtitle data.</param>
-        /// <returns>A list of <see cref="SubtitleItem"/> objects parsed from the stream.</returns>
-        public List<SubtitleItem> ParseStream(Stream stream)
+        /// <returns>A list of <see cref="SubtitleCue"/> objects parsed from the stream.</returns>
+        public List<SubtitleCue> ParseStream(Stream stream)
         {
             return ParseStream(stream, new SubtitleParserOptions { Encoding = Encoding.UTF8, TimecodeMode = SubtitleTimecodeMode.Required });
         }
@@ -81,8 +81,8 @@ namespace SpongeEngine.SubtitleSharp.Parsers
         /// <param name="stream">The input stream containing subtitle data.</param>
         /// <param name="options">Parser options including encoding and timecode mode.</param>
         /// <param name="subFormat">An optional preferred subtitle format to prioritize during parsing.</param>
-        /// <returns>A list of <see cref="SubtitleItem"/> objects extracted from the stream.</returns>
-        public List<SubtitleItem> ParseStream(Stream stream, SubtitleParserOptions options)
+        /// <returns>A list of <see cref="SubtitleCue"/> objects extracted from the stream.</returns>
+        public List<SubtitleCue> ParseStream(Stream stream, SubtitleParserOptions options)
         {
             Dictionary<SubtitlesFormat, ISubtitleParser> dictionary = options.PrioritizedSubtitleFormat != null ?
                 _subFormatToParser
@@ -99,11 +99,11 @@ namespace SpongeEngine.SubtitleSharp.Parsers
         /// <param name="stream">The input stream containing subtitle data.</param>
         /// <param name="options">Parser options including encoding and timecode mode.</param>
         /// <param name="subFormatDictionary">A dictionary mapping subtitle formats to their respective parsers.</param>
-        /// <returns>A list of <see cref="SubtitleItem"/> objects parsed from the stream.</returns>
+        /// <returns>A list of <see cref="SubtitleCue"/> objects parsed from the stream.</returns>
         /// <exception cref="ArgumentException">
         /// Thrown if the stream is not readable or if no parser can successfully extract subtitle items.
         /// </exception>
-        public List<SubtitleItem> ParseStream(Stream stream, SubtitleParserOptions options, Dictionary<SubtitlesFormat, ISubtitleParser> subFormatDictionary)
+        public List<SubtitleCue> ParseStream(Stream stream, SubtitleParserOptions options, Dictionary<SubtitlesFormat, ISubtitleParser> subFormatDictionary)
         {
             if (!stream.CanRead)
             {
@@ -125,7 +125,7 @@ namespace SpongeEngine.SubtitleSharp.Parsers
                 try
                 {
                     ISubtitleParser subtitleParser = kvp.Value;
-                    List<SubtitleItem> items = subtitleParser.ParseStream(seekableStream, options);
+                    List<SubtitleCue> items = subtitleParser.ParseStream(seekableStream, options);
                     if (items != null && items.Any())
                         return items;
                 }

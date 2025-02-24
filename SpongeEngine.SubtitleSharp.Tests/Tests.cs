@@ -32,7 +32,7 @@ namespace SpongeEngine.SubtitleSharp.Tests
             using (FileStream fileStream = File.OpenRead(validVttFilePath))
             {
                 SubtitlesFormat format = _parser.GetMostLikelyFormat(validVttFilePath);
-                List<SubtitleItem> items = _parser.ParseStream(fileStream, new SubtitleParserOptions() { Encoding = Encoding.UTF8, TimecodeMode = SubtitleTimecodeMode.Required });
+                List<SubtitleCue> items = _parser.ParseStream(fileStream, new SubtitleParserOptions() { Encoding = Encoding.UTF8, TimecodeMode = SubtitleTimecodeMode.Required });
                 Assert.NotEmpty(items);
                 Assert.All(items, item =>
                 {
@@ -49,7 +49,7 @@ namespace SpongeEngine.SubtitleSharp.Tests
             {
                 using (FileStream fileStream = File.OpenRead(srtFilePath))
                 {
-                    List<SubtitleItem> items = _parser.ParseStream(fileStream, new SubtitleParserOptions() { Encoding = Encoding.UTF8, TimecodeMode = SubtitleTimecodeMode.Required });
+                    List<SubtitleCue> items = _parser.ParseStream(fileStream, new SubtitleParserOptions() { Encoding = Encoding.UTF8, TimecodeMode = SubtitleTimecodeMode.Required });
                     foreach (var subtitleItem in items)
                     {
                         _output.WriteLine(subtitleItem.ToString());
@@ -68,7 +68,7 @@ namespace SpongeEngine.SubtitleSharp.Tests
             {
                 using (FileStream fileStream = File.OpenRead(srtFilePath))
                 {
-                    List<SubtitleItem> items = _parser.ParseStream(fileStream, new SubtitleParserOptions() { Encoding = Encoding.UTF8, TimecodeMode = SubtitleTimecodeMode.Optional });
+                    List<SubtitleCue> items = _parser.ParseStream(fileStream, new SubtitleParserOptions() { Encoding = Encoding.UTF8, TimecodeMode = SubtitleTimecodeMode.Optional });
                     foreach (var subtitleItem in items)
                     {
                         _output.WriteLine(subtitleItem.ToString());
@@ -86,7 +86,7 @@ namespace SpongeEngine.SubtitleSharp.Tests
             using (FileStream fileStream = File.OpenRead(validAssFilePath))
             {
                 SubtitlesFormat format = _parser.GetMostLikelyFormat(validAssFilePath);
-                List<SubtitleItem> items = _parser.ParseStream(fileStream, new SubtitleParserOptions() { Encoding = Encoding.UTF8, TimecodeMode = SubtitleTimecodeMode.Required });
+                List<SubtitleCue> items = _parser.ParseStream(fileStream, new SubtitleParserOptions() { Encoding = Encoding.UTF8, TimecodeMode = SubtitleTimecodeMode.Required });
                 Assert.NotEmpty(items);
                 Assert.All(items, item =>
                 {
@@ -257,7 +257,7 @@ Subtitle line one
 Subtitle line two";
 
             // Use the new ParseText overload
-            List<SubtitleItem> items = _parser.ParseText(vttContent, new SubtitleParserOptions() { Encoding = Encoding.UTF8, TimecodeMode = SubtitleTimecodeMode.Required, PrioritizedSubtitleFormat = SubtitlesFormat.WebVttFormat });
+            List<SubtitleCue> items = _parser.ParseText(vttContent, new SubtitleParserOptions() { Encoding = Encoding.UTF8, TimecodeMode = SubtitleTimecodeMode.Required, PrioritizedSubtitleFormat = SubtitlesFormat.WebVttFormat });
     
             Assert.NotEmpty(items);
             Assert.Equal(2, items.Count);

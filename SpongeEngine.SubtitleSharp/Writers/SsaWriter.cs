@@ -45,28 +45,28 @@ namespace SpongeEngine.SubtitleSharp.Writers
         }
 
         /// <summary>
-        /// Converts a <see cref="SubtitleItem"/> into an SSA-formatted dialogue line.
+        /// Converts a <see cref="SubtitleCue"/> into an SSA-formatted dialogue line.
         /// </summary>
-        /// <param name="subtitleItem">The subtitle item to convert.</param>
+        /// <param name="subtitleCue">The subtitle item to convert.</param>
         /// <param name="includeFormatting">
-        /// Determines whether to include formatting codes. If <c>false</c> and <see cref="SubtitleItem.PlaintextLines"/> is set,
+        /// Determines whether to include formatting codes. If <c>false</c> and <see cref="SubtitleCue.PlaintextLines"/> is set,
         /// those lines will be used instead.
         /// </param>
         /// <returns>A formatted dialogue line as a string.</returns>
-        private string SubtitleItemToDialogueLine(SubtitleItem subtitleItem, bool includeFormatting)
+        private string SubtitleItemToDialogueLine(SubtitleCue subtitleCue, bool includeFormatting)
         {
             string[] fields = new string[10]; // Fields for layer, start, end, style, name, margins, effect, and text.
             fields[0] = "0"; // Layer (default 0)
-            fields[1] = TimeSpan.FromMilliseconds(subtitleItem.StartTime).ToString(@"h\:mm\:ss\.fff"); // Start time
-            fields[2] = TimeSpan.FromMilliseconds(subtitleItem.EndTime).ToString(@"h\:mm\:ss\.fff");   // End time
+            fields[1] = TimeSpan.FromMilliseconds(subtitleCue.StartTime).ToString(@"h\:mm\:ss\.fff"); // Start time
+            fields[2] = TimeSpan.FromMilliseconds(subtitleCue.EndTime).ToString(@"h\:mm\:ss\.fff");   // End time
             fields[5] = "0"; // Left margin
             fields[6] = "0"; // Right margin 
             fields[7] = "0"; // Vertical margin
 
             // Combine text lines, using either the formatted or plaintext version.
-            List<string> lines = includeFormatting == false && subtitleItem.PlaintextLines != null ?
-                subtitleItem.PlaintextLines :
-                subtitleItem.Lines;
+            List<string> lines = includeFormatting == false && subtitleCue.PlaintextLines != null ?
+                subtitleCue.PlaintextLines :
+                subtitleCue.Lines;
             fields[9] = lines.Aggregate(string.Empty, (current, line) => current + $"{line}\\N").TrimEnd('\\', 'N');
 
             StringBuilder builder = new StringBuilder(SsaFormatConstants.DIALOGUE_PREFIX);
@@ -79,16 +79,16 @@ namespace SpongeEngine.SubtitleSharp.Writers
         /// <param name="stream">The output stream.</param>
         /// <param name="subtitleItems">The subtitle items to write.</param>
         /// <param name="includeFormatting">
-        /// Determines whether to include formatting codes. If <c>false</c>, <see cref="SubtitleItem.PlaintextLines"/> should be populated.
+        /// Determines whether to include formatting codes. If <c>false</c>, <see cref="SubtitleCue.PlaintextLines"/> should be populated.
         /// </param>
-        public void WriteStream(Stream stream, IEnumerable<SubtitleItem> subtitleItems, bool includeFormatting = true)
+        public void WriteStream(Stream stream, IEnumerable<SubtitleCue> subtitleItems, bool includeFormatting = true)
         {
             using TextWriter writer = new StreamWriter(stream);
             WriteHeader(writer);
 
             writer.WriteLine(SsaFormatConstants.EVENT_LINE);
             writer.WriteLine("Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text"); // Column headers
-            foreach (SubtitleItem item in subtitleItems)
+            foreach (SubtitleCue item in subtitleItems)
                 writer.WriteLine(SubtitleItemToDialogueLine(item, includeFormatting));
         }
 
@@ -98,17 +98,17 @@ namespace SpongeEngine.SubtitleSharp.Writers
         /// <param name="stream">The output stream.</param>
         /// <param name="subtitleItems">The subtitle items to write.</param>
         /// <param name="includeFormatting">
-        /// Determines whether to include formatting codes. If <c>false</c>, <see cref="SubtitleItem.PlaintextLines"/> should be populated.
+        /// Determines whether to include formatting codes. If <c>false</c>, <see cref="SubtitleCue.PlaintextLines"/> should be populated.
         /// </param>
         /// <returns>A task representing the asynchronous write operation.</returns>
-        public async Task WriteStreamAsync(Stream stream, IEnumerable<SubtitleItem> subtitleItems, bool includeFormatting = true)
+        public async Task WriteStreamAsync(Stream stream, IEnumerable<SubtitleCue> subtitleItems, bool includeFormatting = true)
         {
             await using TextWriter writer = new StreamWriter(stream);
             await WriteHeaderAsync(writer);
 
             await writer.WriteLineAsync(SsaFormatConstants.EVENT_LINE);
             await writer.WriteLineAsync("Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text"); // Column headers
-            foreach (SubtitleItem item in subtitleItems)
+            foreach (SubtitleCue item in subtitleItems)
                 await writer.WriteLineAsync(SubtitleItemToDialogueLine(item, includeFormatting));
         }
     }
