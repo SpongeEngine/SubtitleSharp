@@ -69,7 +69,7 @@
         /// <returns>A string showing the start and end times and the subtitle text, with each line separated by a new line.</returns>
         public override string ToString()
         {
-            return $"StartTime={StartTime}, EndTime={EndTime}, Lines{string.Join("", Lines)}";
+            return $"StartTime={StartTime}, EndTime={EndTime}, Lines={string.Join("", Lines)}";
         }
     }
 }
