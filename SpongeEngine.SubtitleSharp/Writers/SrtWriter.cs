@@ -1,4 +1,6 @@
-﻿namespace SpongeEngine.SubtitleSharp.Writers
+﻿using System.Text;
+
+namespace SpongeEngine.SubtitleSharp.Writers
 {
     /// <summary>
     /// Implements writing of subtitle items to a SubRip (SRT) formatted file.
@@ -85,5 +87,32 @@
                 await writer.WriteLineAsync(); // Blank line between entries.
             }
         }
+        
+        /// <summary>
+        /// Converts a collection of subtitle items to a string in SubRip (SRT) format.
+        /// </summary>
+        /// <param name="subtitleItems">The subtitle items to convert.</param>
+        /// <param name="includeFormatting">
+        /// Indicates whether to include formatting codes. If set to <c>false</c> and <see cref="SubtitleCue.PlaintextLines"/> is populated,
+        /// those lines will be used instead.
+        /// </param>
+        /// <returns>A string containing the SRT formatted subtitles.</returns>
+        public string WriteToText(IEnumerable<SubtitleCue> subtitleItems, bool includeFormatting = true)
+        {
+            StringBuilder sb = new StringBuilder();
+            List<SubtitleCue> items = subtitleItems.ToList(); // Prevent multiple enumeration.
+            for (int i = 0; i < items.Count; i++)
+            {
+                SubtitleCue subtitleCue = items[i];
+                IEnumerable<string> lines = SubtitleItemToSubtitleEntry(subtitleCue, i + 1, includeFormatting);
+                foreach (string line in lines)
+                {
+                    sb.AppendLine(line);
+                }
+                sb.AppendLine(); // Blank line between entries.
+            }
+            return sb.ToString();
+        }
+
     }
 }
