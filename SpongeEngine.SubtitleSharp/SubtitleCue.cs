@@ -69,9 +69,7 @@
         /// <returns>A string showing the start and end times and the subtitle text, with each line separated by a new line.</returns>
         public override string ToString()
         {
-            var startTs = new TimeSpan(0, 0, 0, 0, StartTime);
-            var endTs = new TimeSpan(0, 0, 0, 0, EndTime);
-            return string.Format("{0} --> {1}: {2}", startTs.ToString("G"), endTs.ToString("G"), string.Join(Environment.NewLine, Lines));
+            return $"StartTime={StartTime}, EndTime={EndTime}, Lines{string.Join("", Lines)}";
         }
     }
 }
