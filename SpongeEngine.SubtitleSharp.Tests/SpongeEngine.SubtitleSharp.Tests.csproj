@@ -4,7 +4,7 @@
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
         <TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
-        <Version>2.2.1</Version>
+        <Version>2.2.2</Version>
     </PropertyGroup>
 
     <ItemGroup>
