@@ -5,7 +5,7 @@
 [![License](https://img.shields.io/github/license/SpongeEngine/SubtitleSharp)](LICENSE)
 [![.NET](https://img.shields.io/badge/.NET-7.0%20%7C%208.0%20%7C%209.0%2B-512BD4)](https://dotnet.microsoft.com/download)
 
-SubtitleSharp is a C# library for parsing and writing subtitles in the SubRip (SRT) format.
+C# parser and writer for SubRip (SRT) subtitles.
 
 ## Features
 - **Only SRT Support:** Parse and write subtitles in SRT.
